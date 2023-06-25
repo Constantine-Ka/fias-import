@@ -3,9 +3,11 @@ package service
 import (
 	"archive/zip"
 	"fias-import_byLondon/utills/logging"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func Unpacking(path, dest string) []string {
@@ -17,34 +19,42 @@ func Unpacking(path, dest string) []string {
 	}
 	defer zipFile.Close()
 	var result []string
-	os.MkdirAll("tmp", os.ModePerm)
-	for _, file := range zipFile.File {
-		result = append(result, file.Name)
-		// Get the corresponding file in the destination
-		dstFile, err := os.OpenFile(
-			filepath.Join(dest, file.Name),
-			os.O_WRONLY|os.O_CREATE|os.O_TRUNC,
-			file.Mode(),
-		)
-		if err != nil {
-			logger.Error(err)
+	dst := "output"
+	os.MkdirAll("dst", os.ModePerm)
+	for _, f := range zipFile.File {
+		result = append(result, f.Name)
+		filePath := filepath.Join(dst, f.Name)
+		fmt.Println("unzipping file ", filePath)
+
+		if !strings.HasPrefix(filePath, filepath.Clean(dst)+string(os.PathSeparator)) {
+			fmt.Println("invalid file path")
+		}
+		if f.FileInfo().IsDir() {
+			fmt.Println("creating directory...")
+			os.MkdirAll(filePath, os.ModePerm)
+			continue
 		}
 
-		// Copy the contents of the zip to the destination
-		rc, err := file.Open()
-		if err != nil {
-			logger.Error(err)
+		if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
+			panic(err)
 		}
-		_, err = io.Copy(dstFile, rc)
 
-		// Close the file handles
-		rc.Close()
+		dstFile, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+		if err != nil {
+			panic(err)
+		}
+
+		fileInArchive, err := f.Open()
+		if err != nil {
+			panic(err)
+		}
+
+		if _, err := io.Copy(dstFile, fileInArchive); err != nil {
+			panic(err)
+		}
+
 		dstFile.Close()
-
-		if err != nil {
-			logger.Error(err)
-
-		}
+		fileInArchive.Close()
 	}
 
 	return result

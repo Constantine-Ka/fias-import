@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/pkg/service"
 	"fias-import_byLondon/utills/logging"
 	"fmt"
@@ -26,13 +25,13 @@ func main() {
 
 	//-------------------------------`-------
 	//Инициализация Баз данных
-	db, err := repository.NewDB(vp)
-	db.SetConnMaxLifetime(0)
-	db.SetMaxOpenConns(0)
-	if err != nil {
-		logger.Fatalf("failed to initialize db:%s",
-			err.Error())
-	}
+	//db, err := repository.NewDB(vp)
+	//db.SetConnMaxLifetime(0)
+	//db.SetMaxOpenConns(0)
+	//if err != nil {
+	//	logger.Fatalf("failed to initialize db:%s",
+	//		err.Error())
+	//}
 	//repos := repository.NewRepository(db)
 	//services := service.NewService(repos)
 	//handlers := handler.NewHandler(services)
