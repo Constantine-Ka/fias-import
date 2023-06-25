@@ -1,0 +1,21 @@
+db:
+  driver: "mysql"
+  username: "konstantine"
+  password: "23981487"
+  host: "localhost"
+  port: "6033"
+  dbname: "u0029384_cession"
+  sslmode: "disable"
+
+# В поле driver писать или "postgres" или "mysql"
+tablename:
+  gasp: "dict_court_links"
+  osp: "dict_department_osp"
+  msudrf: "locality"
+  address: "address"
+  dependenciescourt: "addr_dependencies_court"
+  dependenciesosp: "addr_dependencies_osp"
+  reasons: "invalid_addr_court"
+  invalidstruct: "invalid_struct"
+  invalidcourtaddr: "invalid_court_addr"
+  invalidospaddr: "invalid_osp_addr"
