@@ -2,60 +2,135 @@ package service
 
 import (
 	"archive/zip"
+	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/utills/logging"
-	"fmt"
-	"io"
-	"os"
-	"path/filepath"
-	"strings"
+	"log"
+	"regexp"
 )
 
-func Unpacking(path, dest string) []string {
-	logger := logging.GetLogger()
+type FileServices struct {
+	repo repository.Inserter
+}
 
+func (s FileServices) Unpacking(path string) []string {
+	logger := logging.GetLogger()
+	log.Println("Начало распаковки")
 	zipFile, err := zip.OpenReader(path)
+	log.Println("Конец распаковки")
 	if err != nil {
 		logger.Fatal(err.Error())
 	}
 	defer zipFile.Close()
 	var result []string
-	dst := "output"
-	os.MkdirAll("dst", os.ModePerm)
 	for _, f := range zipFile.File {
 		result = append(result, f.Name)
-		filePath := filepath.Join(dst, f.Name)
-		fmt.Println("unzipping file ", filePath)
-
-		if !strings.HasPrefix(filePath, filepath.Clean(dst)+string(os.PathSeparator)) {
-			fmt.Println("invalid file path")
-		}
-		if f.FileInfo().IsDir() {
-			fmt.Println("creating directory...")
-			os.MkdirAll(filePath, os.ModePerm)
-			continue
-		}
-
-		if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
-			panic(err)
-		}
-
-		dstFile, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+		//log.Println(f.Name)
+		fileReader, err := f.Open()
 		if err != nil {
-			panic(err)
+			logger.Fatal(err)
 		}
-
-		fileInArchive, err := f.Open()
+		regexFilename, err := regexp.MatchString(`AS_ADDR_OBJ_\d{8}`, f.Name)
 		if err != nil {
-			panic(err)
+			logger.Fatal(err)
 		}
+		if regexFilename {
+			log.Println("😎")
+			AddRObj := s.ParserAddrObj(fileReader)
+			log.Println(len(AddRObj.ObjectField))
+			for _, objects := range AddRObj.ObjectField {
+				log.Println("😛")
+				s.repo.InsertObjAddr("fias_object", objects)
+			}
 
-		if _, err := io.Copy(dstFile, fileInArchive); err != nil {
-			panic(err)
 		}
-
-		dstFile.Close()
-		fileInArchive.Close()
+		//regexFilename, err = regexp.MatchString(`AS_ADDR_OBJ_DIVISION_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	AddRObjDivison := ParserAddrObjDivision(fileReader)
+		//}
+		//
+		//regexFilename, err = regexp.MatchString(`AS_ADM_HIERARCHY_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	AddRAdmHieRarchy := ParserAdmHieRarchy(fileReader)
+		//}
+		//regexFilename, err = regexp.MatchString(`AS_APARTMENTS_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	AddRApartments := ParserApartments(fileReader)
+		//}
+		//
+		//
+		//regexFilename, err = regexp.MatchString(`AS_CARPLACES_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	carplaces := ParserCarplaces(fileReader)
+		//}
+		//
+		//
+		//regexFilename, err = regexp.MatchString(`AS_HOUSES_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	houses := ParserHouses(fileReader)
+		//}
+		//
+		//
+		//regexFilename, err = regexp.MatchString(`AS_MUN_HIERARCHY_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	MunHieRarchy := ParserMunHieRarchy(fileReader)
+		//}
+		////regexFilename, err = regexp.MatchString(`AS_NORMATIVE_DOCS_\d{8}`, f.Name)
+		////if err != nil {
+		////	logger.Fatal(err)
+		////}
+		//
+		//regexFilename, err = regexp.MatchString(`AS_REESTR_OBJECTS_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//if regexFilename {
+		//	ReestrObj := ParserReestrObj(fileReader)
+		//}
+		//regexFilename, err = regexp.MatchString(`AS_ROOMS_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//
+		//if regexFilename {
+		//	rooms := ParserRooms(fileReader)
+		//}
+		//
+		//regexFilename, err = regexp.MatchString(`AS_STEADS_\d{8}`, f.Name)
+		//if err != nil {
+		//	logger.Fatal(err)
+		//}
+		//
+		//if regexFilename {
+		//	steads := ParserSteads(fileReader)
+		//}
+		//
+		//if strings.Contains(f.Name, "ADDR_OBJ_") {
+		//	log.Println(f.Name)
+		//	//addrObjects := s.ParserAddrObj(fileReader)
+		//}
 	}
 
 	return result
+}
+
+func NewFileService(repo repository.Inserter) *FileServices {
+	return &FileServices{repo: repo}
 }

@@ -4,7 +4,7 @@ db:
   password: "23981487"
   host: "localhost"
   port: "6033"
-  dbname: "app_db"
+  dbname: "fias2"
   sslmode: "disable"
 
 # В поле driver писать или "postgres" или "mysql"
