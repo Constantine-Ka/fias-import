@@ -1,8 +1,8 @@
-package model
+package model_hierarchy
 
 import "encoding/xml"
 
-type ITEMSMUN_HIERARCHY struct {
+type MUNITEMS struct {
 	XMLName xml.Name `xml:"ITEMS"`
 	Text    string   `xml:",chardata"`
 	ITEM    []struct {

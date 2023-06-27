@@ -2,22 +2,51 @@ package repository
 
 import (
 	"fias-import_byLondon/model"
+	model_apartments "fias-import_byLondon/model/model-apartments"
+	model_carplaces "fias-import_byLondon/model/model-carplaces"
+	model_hierarchy "fias-import_byLondon/model/model-hierarchy"
+	model_houses "fias-import_byLondon/model/model-houses"
+	model_objectAddr "fias-import_byLondon/model/model-objectAddr"
+	model_other "fias-import_byLondon/model/model-other"
+	model_rooms "fias-import_byLondon/model/model-rooms"
+	model_steads "fias-import_byLondon/model/model-steads"
 	"github.com/jmoiron/sqlx"
 )
 
+type dict interface {
+	Paramtypes(tableName string, i interface{}) bool
+	Ndoctypes(tableName string, i model.NDOCTYPES) bool
+	Ndockinds(tableName string, i model.NDOCKINDS) bool
+	Addressobjecttypes(tableName string, i interface{}) bool
+}
+type dictInsert interface {
+	//Paramtypes(tableName string, i interface{}) bool
+	//Ndoctypes(tableName string, i interface{}) bool
+	//Ndockinds(tableName string, i interface{}) bool
+	//Addressobjecttypes(tableName string, i interface{}) bool
+}
+type content interface {
+	Params(tableName string, i interface{}) bool
+	AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool
+	MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool
+	Apartments(tableName string, i model_apartments.APARTMENTS) bool
+	Carplaces(tableName string, i model_carplaces.CARPLACES) bool
+	Houses(tableName string, i model_houses.HOUSES) bool
+	AddrObject(tableName string, i interface{}) bool
+	Rooms(tableName string, i model_rooms.ROOMS) bool
+	Steads(tableName string, i model_steads.STEADS) bool
+	ObjectDivision(tableName string, i model_objectAddr.ITEMS) bool
+	ChangeHistory(tableName string, i model_other.CHANGEHISTORY) bool
+	NormDocs(tableName string, i model_other.NORMDOCS) bool
+	ReestrObject(tableName string, i model_other.REESTROBJECTS) bool
+}
+
 type CreateTable interface {
-	AddrObject(tableName string) bool
-	AdmHierarchy(tableName string) bool
-	Apartments(tableName string) bool
-	Carplaces(tableName string) bool
-	Houses(tableName string) bool
-	MunHierarchy(tableName string) bool
-	Reestr(tableName string) bool
-	Rooms(tableName string) bool
-	Steards(tablename string) bool
+	dict
+	content
 }
 type Inserter interface {
-	InsertObjAddr(tablename string, data model.Objects) bool
+	content
 }
 type Repository struct {
 	CreateTable

@@ -1,8 +1,8 @@
-package model
+package model_houses
 
 import "encoding/xml"
 
-type PARAMSSteads struct {
+type PARAMS struct {
 	XMLName xml.Name `xml:"PARAMS"`
 	Text    string   `xml:",chardata"`
 	PARAM   []struct {

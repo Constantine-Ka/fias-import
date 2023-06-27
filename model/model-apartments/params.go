@@ -1,8 +1,8 @@
-package model
+package model_apartments
 
 import "encoding/xml"
 
-type ApartmentPARAMS struct {
+type PARAMS struct {
 	XMLName xml.Name `xml:"PARAMS"`
 	Text    string   `xml:",chardata"`
 	PARAM   []struct {

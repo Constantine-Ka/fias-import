@@ -1,11 +1,11 @@
-package model
+package model_carplaces
 
 import "encoding/xml"
 
-type STEADS struct {
-	XMLName xml.Name `xml:"STEADS"`
-	Text    string   `xml:",chardata"`
-	STEAD   []struct {
+type CARPLACES struct {
+	XMLName  xml.Name `xml:"CARPLACES"`
+	Text     string   `xml:",chardata"`
+	CARPLACE []struct {
 		Text       string `xml:",chardata"`
 		ID         string `xml:"ID,attr"`
 		OBJECTID   string `xml:"OBJECTID,attr"`
@@ -20,5 +20,5 @@ type STEADS struct {
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		ISACTUAL   string `xml:"ISACTUAL,attr"`
 		ISACTIVE   string `xml:"ISACTIVE,attr"`
-	} `xml:"STEAD"`
+	} `xml:"CARPLACE"`
 }
