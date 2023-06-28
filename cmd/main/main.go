@@ -44,8 +44,8 @@ func main() {
 	//----------------------------------------------------
 	//Сама программа
 	logger.Infoln("Запущено")
-	//services.InstallServices.NewTables()
-	_ = services.Unpacking("./store/gar_xml.zip")
+	services.InstallServices.NewTables()
+	//_ = services.Unpacking("./store/gar_xml.zip")
 	//for _, name := range names {
 	//	log.Println(name)
 	//}

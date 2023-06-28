@@ -1,6 +1,17 @@
 package service
 
-import "fias-import_byLondon/pkg/repository"
+import (
+	"fias-import_byLondon/model"
+	model_apartments "fias-import_byLondon/model/model-apartments"
+	model_carplaces "fias-import_byLondon/model/model-carplaces"
+	model_hierarchy "fias-import_byLondon/model/model-hierarchy"
+	model_houses "fias-import_byLondon/model/model-houses"
+	model_objectAddr "fias-import_byLondon/model/model-objectAddr"
+	model_other "fias-import_byLondon/model/model-other"
+	model_rooms "fias-import_byLondon/model/model-rooms"
+	model_steads "fias-import_byLondon/model/model-steads"
+	"fias-import_byLondon/pkg/repository"
+)
 
 type InstallService struct {
 	repo *repository.Repository
@@ -8,113 +19,113 @@ type InstallService struct {
 
 func (i InstallService) NewTables() bool {
 	isSuccess := false
-	name := i.repo.Paramtypes("dict_paramtypes", nil)
+	name := i.repo.CreateTable.Paramtypes("dict_paramtypes", nil)
 	isSuccess = name
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Ndoctypes("dict_doctypes", nil)
+	isSuccess = i.repo.CreateTable.Ndoctypes("dict_doctypes", model.NDOCTYPES{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Ndockinds("dict_dict_doctinds, nil", nil)
+	isSuccess = i.repo.CreateTable.Ndockinds("dict_doctkinds", model.NDOCKINDS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_addhousetypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_addhousetypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_addressobjecttypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_addressobjecttypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_apartmenttypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_apartmenttypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_housetypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_housetypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_operationtypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_operationtypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_roomtypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_roomtypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Addressobjecttypes("dict_levelstypes", nil)
+	isSuccess = i.repo.CreateTable.Addressobjecttypes("dict_levelstypes", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.AdmHierarchy("hierarchy_adm", nil)
+	isSuccess = i.repo.CreateTable.AdmHierarchy("hierarchy_adm", model_hierarchy.ADMITEMS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.AdmHierarchy("hierarchy_mun", nil)
+	isSuccess = i.repo.CreateTable.MunHierarchy("hierarchy_mun", model_hierarchy.MUNITEMS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Apartments("apartments", nil)
+	isSuccess = i.repo.CreateTable.Apartments("apartments", model_apartments.APARTMENTS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Params("apartments_param", nil)
+	isSuccess = i.repo.CreateTable.Params("apartments_param", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Carplaces("carplaces", nil)
+	isSuccess = i.repo.CreateTable.Carplaces("carplaces", model_carplaces.CARPLACES{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Params("carplaces_param", nil)
+	isSuccess = i.repo.CreateTable.Params("carplaces_param", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Houses("houses", nil)
+	isSuccess = i.repo.CreateTable.Houses("houses", model_houses.HOUSES{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Params("houses_param", nil)
+	isSuccess = i.repo.CreateTable.Params("houses_param", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Rooms("rooms", nil)
+	isSuccess = i.repo.CreateTable.Rooms("rooms", model_rooms.ROOMS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Params("rooms_param", nil)
+	isSuccess = i.repo.CreateTable.Params("rooms_param", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Steads("steads", nil)
+	isSuccess = i.repo.CreateTable.Steads("steads", model_steads.STEADS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Params("steads_param", nil)
+	isSuccess = i.repo.CreateTable.Params("steads_param", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.ChangeHistory("change_history", nil)
+	isSuccess = i.repo.CreateTable.ChangeHistory("change_history", model_other.CHANGEHISTORY{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.NormDocs("norm_docs", nil)
+	isSuccess = i.repo.CreateTable.NormDocs("norm_docs", model_other.NORMDOCS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.ReestrObject("reestr_object", nil)
+	isSuccess = i.repo.CreateTable.ReestrObject("reestr_object", model_other.REESTROBJECTS{})
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.AddrObject("object", nil)
+	isSuccess = i.repo.CreateTable.AddrObject("object", nil)
 	if !isSuccess {
 		return false
 	}
-	isSuccess = i.repo.Params("object_param", nil)
-	isSuccess = i.repo.ObjectDivision("object_division", nil)
+	isSuccess = i.repo.CreateTable.Params("object_param", nil)
+	isSuccess = i.repo.CreateTable.ObjectDivision("object_division", model_objectAddr.ITEMS{})
 	if !isSuccess {
 		return false
 	}
