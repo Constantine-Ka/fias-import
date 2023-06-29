@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fias-import_byLondon/model"
 	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/pkg/service"
 	"fias-import_byLondon/utills/logging"
@@ -45,7 +46,7 @@ func main() {
 	//Сама программа
 	logger.Infoln("Запущено")
 	services.InstallServices.NewTables()
-	//_ = services.Unpacking("./store/gar_xml.zip")
+	_ = services.Unpacking("./store/gar_xml.zip")
 	//for _, name := range names {
 	//	log.Println(name)
 	//}
@@ -57,4 +58,22 @@ func main() {
 	logger.Info("Завершено")
 	//----------------------------------------------------
 
+}
+
+func getConf() *model.Config {
+	viper.AddConfigPath(".")
+	viper.SetConfigName("config")
+	err := viper.ReadInConfig()
+
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+
+	conf := &model.Config{}
+	err = viper.Unmarshal(conf)
+	if err != nil {
+		fmt.Printf("unable to decode into config struct, %v", err)
+	}
+
+	return conf
 }

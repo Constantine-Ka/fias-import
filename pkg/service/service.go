@@ -1,10 +1,13 @@
 package service
 
 import (
+	"fias-import_byLondon/model"
 	model_objectAddr "fias-import_byLondon/model/model-objectAddr"
 	"fias-import_byLondon/pkg/repository"
 	"io"
 )
+
+var cfg *model.Config
 
 type InstallServices interface {
 	NewTables() bool

@@ -26,13 +26,13 @@ type dictInsert interface {
 	//Addressobjecttypes(tableName string, i interface{}) bool
 }
 type content interface {
-	Params(tableName string, i interface{}) bool
+	Params(tableName string, i model.PARAMS) bool
 	AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool
 	MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool
 	Apartments(tableName string, i model_apartments.APARTMENTS) bool
 	Carplaces(tableName string, i model_carplaces.CARPLACES) bool
 	Houses(tableName string, i model_houses.HOUSES) bool
-	AddrObject(tableName string, i interface{}) bool
+	AddrObject(tableName string, i model_objectAddr.ADDRESSOBJECTS) bool
 	Rooms(tableName string, i model_rooms.ROOMS) bool
 	Steads(tableName string, i model_steads.STEADS) bool
 	ObjectDivision(tableName string, i model_objectAddr.ITEMS) bool

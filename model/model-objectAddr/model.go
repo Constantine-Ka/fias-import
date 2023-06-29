@@ -7,20 +7,20 @@ type ADDRESSOBJECTS struct {
 	Text    string   `xml:",chardata"`
 	OBJECT  []struct {
 		Text       string `xml:",chardata"`
-		ID         string `xml:"ID,attr"`
-		OBJECTID   string `xml:"OBJECTID,attr"`
+		ID         int64  `xml:"ID,attr"`
+		OBJECTID   int64  `xml:"OBJECTID,attr"`
 		OBJECTGUID string `xml:"OBJECTGUID,attr"`
-		CHANGEID   string `xml:"CHANGEID,attr"`
+		CHANGEID   int64  `xml:"CHANGEID,attr"`
 		NAME       string `xml:"NAME,attr"`
 		TYPENAME   string `xml:"TYPENAME,attr"`
-		LEVEL      string `xml:"LEVEL,attr"`
-		OPERTYPEID string `xml:"OPERTYPEID,attr"`
-		PREVID     string `xml:"PREVID,attr"`
-		NEXTID     string `xml:"NEXTID,attr"`
+		LEVEL      int64  `xml:"LEVEL,attr"`
+		OPERTYPEID int64  `xml:"OPERTYPEID,attr"`
+		PREVID     int64  `xml:"PREVID,attr"`
+		NEXTID     int64  `xml:"NEXTID,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
-		ISACTUAL   string `xml:"ISACTUAL,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTUAL   int8   `xml:"ISACTUAL,attr"`
+		ISACTIVE   int8   `xml:"ISACTIVE,attr"`
 	} `xml:"OBJECT"`
 }
