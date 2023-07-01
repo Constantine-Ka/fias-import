@@ -2,9 +2,11 @@ package main
 
 import (
 	"fias-import_byLondon/model"
+	"fias-import_byLondon/pkg/handler"
 	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/pkg/service"
 	"fias-import_byLondon/utills/logging"
+	"flag"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -18,16 +20,47 @@ func main() {
 	logger := logging.GetLogger()
 	logger.Info("Подготовка")
 	vp := viper.New()
-	vp.AddConfigPath(".") // optionally look for config in the working directory
+	vp.AddConfigPath(".")
 	//vp.SetConfigName("config.yaml")
-	err := vp.ReadInConfig() // Find and read the config file
-	if err != nil {          // Handle errors reading the config file
+	err := vp.ReadInConfig()
+	if err != nil {
 		logrus.Error(fmt.Errorf("fatal error config file: %w",
 			err))
 	}
+	sftpClient, sshClient := handler.CreateConnection(*vp)
+	defer sftpClient.Close()
+	defer sshClient.Close()
+	//sftpClient.Wait()
 	//config.GetConf()
 
 	//-------------------------------`-------
+	//Инициализация Флагов
+	file := flag.String("zipfile", vp.GetString("basic.filepath"), "Путь к файлу")
+	prefix := flag.String("prefix", vp.GetString("basic.prefix"), "Что парсить")
+	//---Варианты префиксов
+	// @param dict
+	// @param addrobj
+	// @param addrobjdiv
+	// @param addrobjp
+	// @param hierarchyadm
+	// @param hierarchymun
+	// @param appartments
+	// @param appartmentsp
+	// @param carplaces
+	// @param carplacesp
+	// @param history
+	// @param houses
+	// @param housesp
+	// @param normativedocs
+	// @param reestrobj
+	// @param rooms
+	// @param roomsp
+	// @param steads
+	// @param steadsp
+
+	//--------
+	flag.Parse()
+	//-------------------------------------
 	//Инициализация Баз данных
 	db, err := repository.NewDB(vp)
 	db.SetConnMaxLifetime(0)
@@ -38,7 +71,7 @@ func main() {
 	}
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
-	//handlers := handler.NewHandler(services)
+	//handlers := handler.NewHandler(services, sshClient)
 	//ospTablename := vp.GetString("tablename.osp")
 	//--------------------------------------
 	//Счётчики
@@ -48,8 +81,9 @@ func main() {
 	//----------------------------------------------------
 	//Сама программа
 	logger.Infoln("Запущено")
+
 	//services.InstallServices.NewTables()
-	_ = services.Unpacking(vp.GetString("filepath"))
+	_ = services.Unpacking(*file, *prefix, sftpClient, sshClient)
 	//for _, name := range names {
 	//	log.Println(name)
 	//}
@@ -59,6 +93,7 @@ func main() {
 	logger.Info("Успешно: ", countValid)
 	logger.Info("Неудачно: ", countInvalid)
 	logger.Info("Завершено")
+
 	//----------------------------------------------------
 
 }

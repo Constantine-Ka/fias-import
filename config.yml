@@ -1,4 +1,6 @@
-filepath: "./store/gar_xml.zip"
+basic:
+  filepath: "/mnt/disk/files/fias"
+  prefix: "all"
 db:
   driver: "mysql"
   username: "konstantine"
@@ -7,6 +9,12 @@ db:
   port: "6033"
   dbname: "fias2"
   sslmode: "disable"
+
+SFTP:
+  host: 91.219.102.77
+  username: web
+  password: np6aGzq5
+  port: 22
 
 # В поле driver писать или "postgres" или "mysql"
 tablename:
