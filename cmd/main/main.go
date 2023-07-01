@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var cfg *model.Config
+
 func main() {
 	//--------------------------------------
 	//Инициализация библиотек
@@ -23,6 +25,7 @@ func main() {
 		logrus.Error(fmt.Errorf("fatal error config file: %w",
 			err))
 	}
+	//config.GetConf()
 
 	//-------------------------------`-------
 	//Инициализация Баз данных
@@ -45,8 +48,8 @@ func main() {
 	//----------------------------------------------------
 	//Сама программа
 	logger.Infoln("Запущено")
-	services.InstallServices.NewTables()
-	_ = services.Unpacking("./store/gar_xml.zip")
+	//services.InstallServices.NewTables()
+	_ = services.Unpacking(vp.GetString("filepath"))
 	//for _, name := range names {
 	//	log.Println(name)
 	//}
@@ -58,22 +61,4 @@ func main() {
 	logger.Info("Завершено")
 	//----------------------------------------------------
 
-}
-
-func getConf() *model.Config {
-	viper.AddConfigPath(".")
-	viper.SetConfigName("config")
-	err := viper.ReadInConfig()
-
-	if err != nil {
-		fmt.Printf("%v", err)
-	}
-
-	conf := &model.Config{}
-	err = viper.Unmarshal(conf)
-	if err != nil {
-		fmt.Printf("unable to decode into config struct, %v", err)
-	}
-
-	return conf
 }

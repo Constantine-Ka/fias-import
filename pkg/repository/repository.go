@@ -13,11 +13,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type Global interface {
+	ListTable() []string
+	SetPrimaryKey(table, field string)
+}
 type dict interface {
-	Paramtypes(tableName string, i interface{}) bool
+	Paramtypes(tableName string, i model.PARAMTYPES) bool
 	Ndoctypes(tableName string, i model.NDOCTYPES) bool
 	Ndockinds(tableName string, i model.NDOCKINDS) bool
-	Addressobjecttypes(tableName string, i interface{}) bool
+	Addressobjecttypes(tableName string, i model.DICTALL) bool
 }
 type dictInsert interface {
 	//Paramtypes(tableName string, i interface{}) bool
@@ -47,10 +51,12 @@ type CreateTable interface {
 }
 type Inserter interface {
 	content
+	dict
 }
 type Repository struct {
 	CreateTable
 	Inserter
+	Global
 	//
 }
 
@@ -58,5 +64,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		CreateTable: NewCreateTable(db),
 		Inserter:    NewInsert(db),
+		Global:      NewGlobal(db),
 	}
 }

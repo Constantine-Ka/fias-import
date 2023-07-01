@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"encoding/xml"
+	"fias-import_byLondon/model"
 	model_apartments "fias-import_byLondon/model/model-apartments"
 	model_carplaces "fias-import_byLondon/model/model-carplaces"
 	model_hierarchy "fias-import_byLondon/model/model-hierarchy"
@@ -11,10 +12,15 @@ import (
 	model_other "fias-import_byLondon/model/model-other"
 	model_rooms "fias-import_byLondon/model/model-rooms"
 	model_steads "fias-import_byLondon/model/model-steads"
+	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/utills/logging"
 	"io"
 	"log"
 )
+
+type XMLServices struct {
+	repo *repository.Repository
+}
 
 func streamToByte(stream io.Reader) []byte {
 	logger := logging.GetLogger()
@@ -32,7 +38,19 @@ func StreamToString(stream io.Reader) string {
 	buf.ReadFrom(stream)
 	return buf.String()
 }
-func (s FileServices) ParserAddrObj(fileReader io.Reader) model_objectAddr.ADDRESSOBJECTS {
+func ParserParams(fileReader io.Reader) model.PARAMS {
+	logger := logging.GetLogger()
+	var result model.PARAMS
+	byteFile := StreamToString(fileReader)
+	err := xml.Unmarshal([]byte(byteFile), &result)
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+}
+func ParserAddrObj(fileReader io.Reader) model_objectAddr.ADDRESSOBJECTS {
 	logger := logging.GetLogger()
 	var result model_objectAddr.ADDRESSOBJECTS
 	byteFile := StreamToString(fileReader)
@@ -42,11 +60,10 @@ func (s FileServices) ParserAddrObj(fileReader io.Reader) model_objectAddr.ADDRE
 			logger.Error(err)
 		}
 	}
-	log.Print(len(result.OBJECT))
 	return result
 }
 
-func (s FileServices) ParserAddrObjDivision(fileReader io.Reader) model_objectAddr.ITEMS {
+func ParserAddrObjDivision(fileReader io.Reader) model_objectAddr.ITEMS {
 	logger := logging.GetLogger()
 	var result model_objectAddr.ITEMS
 	byteFile := StreamToString(fileReader)
@@ -58,7 +75,7 @@ func (s FileServices) ParserAddrObjDivision(fileReader io.Reader) model_objectAd
 	}
 	return result
 }
-func (s FileServices) ParserAdmHieRarchy(fileReader io.Reader) model_hierarchy.ADMITEMS {
+func ParserAdmHieRarchy(fileReader io.Reader) model_hierarchy.ADMITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.ADMITEMS
 	byteFile := StreamToString(fileReader)
@@ -70,7 +87,7 @@ func (s FileServices) ParserAdmHieRarchy(fileReader io.Reader) model_hierarchy.A
 	}
 	return result
 }
-func (s FileServices) ParserApartments(fileReader io.Reader) model_apartments.APARTMENTS {
+func ParserApartments(fileReader io.Reader) model_apartments.APARTMENTS {
 	logger := logging.GetLogger()
 	var result model_apartments.APARTMENTS
 	byteFile := StreamToString(fileReader)
@@ -83,7 +100,7 @@ func (s FileServices) ParserApartments(fileReader io.Reader) model_apartments.AP
 	return result
 }
 
-func (s FileServices) ParserCarplaces(fileReader io.Reader) model_carplaces.CARPLACES {
+func ParserCarplaces(fileReader io.Reader) model_carplaces.CARPLACES {
 	logger := logging.GetLogger()
 	var result model_carplaces.CARPLACES
 	byteFile := StreamToString(fileReader)
@@ -95,7 +112,7 @@ func (s FileServices) ParserCarplaces(fileReader io.Reader) model_carplaces.CARP
 	}
 	return result
 }
-func (s FileServices) ParserHouses(fileReader io.Reader) model_houses.HOUSES {
+func ParserHouses(fileReader io.Reader) model_houses.HOUSES {
 	logger := logging.GetLogger()
 	var result model_houses.HOUSES
 	byteFile := StreamToString(fileReader)
@@ -107,7 +124,7 @@ func (s FileServices) ParserHouses(fileReader io.Reader) model_houses.HOUSES {
 	}
 	return result
 }
-func (s FileServices) arserMunHieRarchy(fileReader io.Reader) model_hierarchy.MUNITEMS {
+func parserMunHieRarchy(fileReader io.Reader) model_hierarchy.MUNITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.MUNITEMS
 	byteFile := StreamToString(fileReader)
@@ -119,7 +136,7 @@ func (s FileServices) arserMunHieRarchy(fileReader io.Reader) model_hierarchy.MU
 	}
 	return result
 }
-func (s FileServices) ParserReestrObj(fileReader io.Reader) model_other.REESTROBJECTS {
+func ParserReestrObj(fileReader io.Reader) model_other.REESTROBJECTS {
 	logger := logging.GetLogger()
 	var result model_other.REESTROBJECTS
 	byteFile := StreamToString(fileReader)
@@ -131,7 +148,7 @@ func (s FileServices) ParserReestrObj(fileReader io.Reader) model_other.REESTROB
 	}
 	return result
 }
-func (s FileServices) ParserRooms(fileReader io.Reader) model_rooms.ROOMS {
+func ParserRooms(fileReader io.Reader) model_rooms.ROOMS {
 	logger := logging.GetLogger()
 	var result model_rooms.ROOMS
 	byteFile := StreamToString(fileReader)
@@ -143,7 +160,7 @@ func (s FileServices) ParserRooms(fileReader io.Reader) model_rooms.ROOMS {
 	}
 	return result
 }
-func (s FileServices) ParserSteads(fileReader io.Reader) model_steads.STEADS {
+func ParserSteads(fileReader io.Reader) model_steads.STEADS {
 	logger := logging.GetLogger()
 	var result model_steads.STEADS
 	byteFile := StreamToString(fileReader)
@@ -154,4 +171,100 @@ func (s FileServices) ParserSteads(fileReader io.Reader) model_steads.STEADS {
 		}
 	}
 	return result
+}
+func ParserChangeH(fileReader io.Reader) model_other.CHANGEHISTORY {
+	logger := logging.GetLogger()
+	var result model_other.CHANGEHISTORY
+	byteFile := StreamToString(fileReader)
+	err := xml.Unmarshal([]byte(byteFile), &result)
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+}
+func ParserNDocs(fileReader io.Reader) model_other.NORMDOCS {
+	logger := logging.GetLogger()
+	var result model_other.NORMDOCS
+	byteFile := StreamToString(fileReader)
+	err := xml.Unmarshal([]byte(byteFile), &result)
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+}
+func parserObjectType(fileReader io.Reader, t string) model.DICTALL {
+	logger := logging.GetLogger()
+	byteFile := StreamToString(fileReader)
+	var result model.DICTALL
+	var err error
+	switch t {
+	case "ADDHOUSE":
+		err = xml.Unmarshal([]byte(byteFile), &result.ADDHOUSETYPES)
+	case "ADDR_OBJ":
+		log.Println("😦")
+		log.Println(byteFile)
+		err = xml.Unmarshal([]byte(byteFile), &result.ADDRESSOBJECTTYPE)
+	case "APARTMENT":
+		err = xml.Unmarshal([]byte(byteFile), &result.APARTMENTTYPES)
+	case "HOUSE":
+		err = xml.Unmarshal([]byte(byteFile), &result.HOUSETYPES)
+	case "LEVELS":
+		err = xml.Unmarshal([]byte(byteFile), &result.OBJECTLEVELS)
+	case "OPERATION":
+		err = xml.Unmarshal([]byte(byteFile), &result.OPERATIONTYPES)
+	case "ROOM":
+		err = xml.Unmarshal([]byte(byteFile), &result.ROOMTYPES)
+	}
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+}
+func ParserNdocsType(fileReader io.Reader) model.NDOCTYPES {
+	logger := logging.GetLogger()
+	var result model.NDOCTYPES
+	byteFile := StreamToString(fileReader)
+	err := xml.Unmarshal([]byte(byteFile), &result)
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+
+}
+func ParserNdocsInd(fileReader io.Reader) model.NDOCKINDS {
+	logger := logging.GetLogger()
+	var result model.NDOCKINDS
+	byteFile := StreamToString(fileReader)
+	err := xml.Unmarshal([]byte(byteFile), &result)
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+}
+func ParserParamTypes(fileReader io.Reader) model.PARAMTYPES {
+	logger := logging.GetLogger()
+	var result model.PARAMTYPES
+	byteFile := StreamToString(fileReader)
+	err := xml.Unmarshal([]byte(byteFile), &result)
+	if err != nil {
+		if err != io.EOF {
+			logger.Error(err)
+		}
+	}
+	return result
+
+}
+
+func NewXMLService(repo *repository.Repository) *XMLServices {
+	return &XMLServices{repo: repo}
 }

@@ -14,12 +14,12 @@ type ROOMS struct {
 		NUMBER     string `xml:"NUMBER,attr"`
 		ROOMTYPE   string `xml:"ROOMTYPE,attr"`
 		OPERTYPEID string `xml:"OPERTYPEID,attr"`
-		PREVID     string `xml:"PREVID,attr"`
+		PREVID     int64  `xml:"PREVID,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		ISACTUAL   string `xml:"ISACTUAL,attr"`
 		ISACTIVE   string `xml:"ISACTIVE,attr"`
-		NEXTID     string `xml:"NEXTID,attr"`
+		NEXTID     int64  `xml:"NEXTID,attr"`
 	} `xml:"ROOM"`
 }

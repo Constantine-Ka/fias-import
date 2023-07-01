@@ -10,11 +10,12 @@ type ADDHOUSETYPES struct {
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		DESC       string `xml:"DESC,attr"`
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 		NAME       string `xml:"NAME,attr"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 	} `xml:"HOUSETYPE"`
 }
 
@@ -24,6 +25,7 @@ type ADDRESSOBJECTTYPES struct {
 	ADDRESSOBJECTTYPE []struct {
 		Text       string `xml:",chardata"`
 		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVEN  string
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
@@ -31,7 +33,7 @@ type ADDRESSOBJECTTYPES struct {
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 		NAME       string `xml:"NAME,attr"`
 		LEVEL      string `xml:"LEVEL,attr"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 	} `xml:"ADDRESSOBJECTTYPE"`
 }
 
@@ -43,14 +45,14 @@ type APARTMENTTYPES struct {
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		DESC       string `xml:"DESC,attr"`
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 		NAME       string `xml:"NAME,attr"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 	} `xml:"APARTMENTTYPE"`
 }
-
 type HOUSETYPES struct {
 	XMLName   xml.Name `xml:"HOUSETYPES"`
 	Text      string   `xml:",chardata"`
@@ -59,11 +61,12 @@ type HOUSETYPES struct {
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		DESC       string `xml:"DESC,attr"`
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 		NAME       string `xml:"NAME,attr"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 	} `xml:"HOUSETYPE"`
 }
 type NDOCKINDS struct {
@@ -75,7 +78,6 @@ type NDOCKINDS struct {
 		ID   string `xml:"ID,attr"`
 	} `xml:"NDOCKIND"`
 }
-
 type NDOCTYPES struct {
 	XMLName  xml.Name `xml:"NDOCTYPES"`
 	Text     string   `xml:",chardata"`
@@ -84,16 +86,16 @@ type NDOCTYPES struct {
 		ENDDATE   string `xml:"ENDDATE,attr"`
 		STARTDATE string `xml:"STARTDATE,attr"`
 		NAME      string `xml:"NAME,attr"`
-		ID        string `xml:"ID,attr"`
+		ID        int64  `xml:"ID,attr"`
 	} `xml:"NDOCTYPE"`
 }
-
 type OBJECTLEVELS struct {
 	XMLName     xml.Name `xml:"OBJECTLEVELS"`
 	Text        string   `xml:",chardata"`
 	OBJECTLEVEL []struct {
 		Text       string `xml:",chardata"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
@@ -101,22 +103,21 @@ type OBJECTLEVELS struct {
 		LEVEL      string `xml:"LEVEL,attr"`
 	} `xml:"OBJECTLEVEL"`
 }
-
 type OPERATIONTYPES struct {
 	XMLName       xml.Name `xml:"OPERATIONTYPES"`
 	Text          string   `xml:",chardata"`
 	OPERATIONTYPE []struct {
 		Text       string `xml:",chardata"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 		NAME       string `xml:"NAME,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 	} `xml:"OPERATIONTYPE"`
 }
-
 type PARAMTYPES struct {
 	XMLName   xml.Name `xml:"PARAMTYPES"`
 	Text      string   `xml:",chardata"`
@@ -125,14 +126,14 @@ type PARAMTYPES struct {
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		CODE       string `xml:"CODE,attr"`
 		DESC       string `xml:"DESC,attr"`
 		NAME       string `xml:"NAME,attr"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 	} `xml:"PARAMTYPE"`
 }
-
 type ROOMTYPES struct {
 	XMLName  xml.Name `xml:"ROOMTYPES"`
 	Text     string   `xml:",chardata"`
@@ -141,10 +142,23 @@ type ROOMTYPES struct {
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
+		ISACTIVEN  int64
 		DESC       string `xml:"DESC,attr"`
 		NAME       string `xml:"NAME,attr"`
-		ID         string `xml:"ID,attr"`
+		ID         int64  `xml:"ID,attr"`
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 	} `xml:"ROOMTYPE"`
+}
+
+type DICTALL struct {
+	ADDHOUSETYPES
+	ADDRESSOBJECTTYPES
+	APARTMENTTYPES
+	HOUSETYPES
+	NDOCTYPES
+	NDOCKINDS
+	OBJECTLEVELS
+	OPERATIONTYPES
+	ROOMTYPES
 }

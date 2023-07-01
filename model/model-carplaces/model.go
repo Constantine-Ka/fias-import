@@ -13,8 +13,8 @@ type CARPLACES struct {
 		CHANGEID   string `xml:"CHANGEID,attr"`
 		NUMBER     string `xml:"NUMBER,attr"`
 		OPERTYPEID string `xml:"OPERTYPEID,attr"`
-		PREVID     string `xml:"PREVID,attr"`
-		NEXTID     string `xml:"NEXTID,attr"`
+		PREVID     int64  `xml:"PREVID,attr"`
+		NEXTID     int64  `xml:"NEXTID,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`

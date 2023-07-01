@@ -12,6 +12,6 @@ type CHANGEHISTORY struct {
 		ADROBJECTID string `xml:"ADROBJECTID,attr"`
 		OPERTYPEID  string `xml:"OPERTYPEID,attr"`
 		CHANGEDATE  string `xml:"CHANGEDATE,attr"`
-		NDOCID      string `xml:"NDOCID,attr"`
+		NDOCID      int64  `xml:"NDOCID,attr"`
 	} `xml:"ITEM"`
 }

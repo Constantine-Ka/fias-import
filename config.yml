@@ -1,3 +1,4 @@
+filepath: "./store/gar_xml.zip"
 db:
   driver: "mysql"
   username: "konstantine"

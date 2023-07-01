@@ -1,20 +1,16 @@
 package service
 
 import (
-	"fias-import_byLondon/model"
-	model_objectAddr "fias-import_byLondon/model/model-objectAddr"
 	"fias-import_byLondon/pkg/repository"
-	"io"
 )
 
-var cfg *model.Config
+//var cfg *model.Config
 
 type InstallServices interface {
 	NewTables() bool
 }
 type FileService interface {
 	Unpacking(path string) []string
-	ParserAddrObj(reader io.Reader) model_objectAddr.ADDRESSOBJECTS
 }
 
 type Service struct {
@@ -24,7 +20,7 @@ type Service struct {
 
 func NewService(db *repository.Repository) *Service {
 	return &Service{
-		InstallServices: NewInstallService(db),
-		FileService:     NewFileService(db),
+		//InstallServices: NewInstallService(db),
+		FileService: NewFileService(db),
 	}
 }

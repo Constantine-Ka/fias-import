@@ -14,8 +14,8 @@ type HOUSES struct {
 		HOUSENUM   string `xml:"HOUSENUM,attr"`
 		HOUSETYPE  string `xml:"HOUSETYPE,attr"`
 		OPERTYPEID string `xml:"OPERTYPEID,attr"`
-		PREVID     string `xml:"PREVID,attr"`
-		NEXTID     string `xml:"NEXTID,attr"`
+		PREVID     int    `xml:"PREVID,attr"`
+		NEXTID     int    `xml:"NEXTID,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`

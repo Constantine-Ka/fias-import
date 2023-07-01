@@ -7,11 +7,11 @@ type PARAMS struct {
 	Text    string   `xml:",chardata"`
 	PARAM   []struct {
 		Text        string `xml:",chardata"`
-		ID          string `xml:"ID,attr"`
+		ID          int64  `xml:"ID,attr"`
 		OBJECTID    string `xml:"OBJECTID,attr"`
 		CHANGEID    string `xml:"CHANGEID,attr"`
 		CHANGEIDEND string `xml:"CHANGEIDEND,attr"`
-		TYPEID      string `xml:"TYPEID,attr"`
+		TYPEID      int64  `xml:"TYPEID,attr"`
 		VALUE       string `xml:"VALUE,attr"`
 		UPDATEDATE  string `xml:"UPDATEDATE,attr"`
 		STARTDATE   string `xml:"STARTDATE,attr"`
