@@ -97,7 +97,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 
 			query = query + ", "
 
-			query = query + fmt.Sprintf("('%d','%d','%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVEN, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, 0, s.Text)
+			query = query + fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, 0, s.Text)
 			if (index%70) == 0 || index+1 == len(i.ADDHOUSETYPES.HOUSETYPE) {
 				query = queryPre + query[1:len(query)]
 				_, err := i2.db.Exec(query)
@@ -115,7 +115,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 
 			query = query + ", "
 
-			query = query + fmt.Sprintf("('%d','%s','%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.ISACTIVEN, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, "1970-01-01", s.Text)
+			query = query + fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, "1970-01-01", s.Text)
 			if (index%70) == 0 || index+1 == len(i.ADDRESSOBJECTTYPES.ADDRESSOBJECTTYPE) {
 				query = queryPre + query[1:len(query)]
 				_, err := i2.db.Exec(query)
@@ -133,7 +133,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 			//if (index%70) != 0 && index != 0 {
 			query = query + ", "
 			//}
-			query = query + fmt.Sprintf("('%d','%d','%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVEN, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, 0, s.Text)
+			query = query + fmt.Sprintf(" ('%d',if(%t,'1', '0'),'%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, 0, s.Text)
 			if (index%70) == 0 || index+1 == len(i.APARTMENTTYPES.APARTMENTTYPE) {
 				query = queryPre + query[1:len(query)]
 
@@ -152,7 +152,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 
 			query = query + ", "
 
-			query = query + fmt.Sprintf("('%d','%d','%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVEN, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, 0, s.Text)
+			query = query + fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, 0, s.Text)
 			if (index%70) == 0 || index+1 == len(i.HOUSETYPES.HOUSETYPE) {
 				query = queryPre + query[1:len(query)]
 				_, err := i2.db.Exec(query)
@@ -170,7 +170,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 
 			query = query + ", "
 
-			query = query + fmt.Sprintf("('%d','%t','%s','%s','%s','%s','%s','%s','%s','%s')", 0, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, "", "", s.NAME, s.LEVEL, s.Text)
+			query = query + fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%s','%s')", 0, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, "", "", s.NAME, s.LEVEL, s.Text)
 			if (index%70) == 0 || index+1 == len(i.OBJECTLEVELS.OBJECTLEVEL) {
 				query = queryPre + query[1:len(query)]
 				_, err := i2.db.Exec(query)
@@ -188,7 +188,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 
 			query = query + ", "
 
-			query = query + fmt.Sprintf("('%d','%d','%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVEN, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, "", s.SHORTNAME, s.NAME, 0, s.Text)
+			query = query + fmt.Sprintf(" ('%d',if(%t,'1', '0'),'%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, "", s.SHORTNAME, s.NAME, 0, s.Text)
 			if (index%70) == 0 || index+1 == len(i.OPERATIONTYPES.OPERATIONTYPE) {
 				query = queryPre + query[1:len(query)]
 				_, err := i2.db.Exec(query)
@@ -206,7 +206,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 
 			query = query + ", "
 
-			query = query + fmt.Sprintf("('%d','%d','%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVEN, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, "", s.SHORTNAME, s.NAME, 0, s.Text)
+			query = query + fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%d','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, "", s.SHORTNAME, s.NAME, 0, s.Text)
 			if (index%70) == 0 || index+1 == len(i.ROOMTYPES.ROOMTYPE) {
 				query = queryPre + query[1:len(query)]
 				_, err := i2.db.Exec(query)
@@ -254,7 +254,7 @@ func (i2 InsertData) AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) 
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = query + fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH, s.Text)
+		query = query + fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',IF(%t,'1','0'),'%s','%s')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH, s.Text)
 
 		if (ind%100) == 0 || ind+1 == len(i.ITEM) {
 			query = queryPre + query[1:len(query)]
@@ -279,7 +279,7 @@ func (i2 InsertData) MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) 
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.OKTMO, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, "1", s.PATH, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',IF(%t,'1','0'),'%s','%s','%s')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.OKTMO, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, "1", s.PATH, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.ITEM) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -302,7 +302,7 @@ func (i2 InsertData) Apartments(tableName string, i model_apartments.APARTMENTS)
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.APARTTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.APARTTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.APARTMENT) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -325,7 +325,7 @@ func (i2 InsertData) Carplaces(tableName string, i model_carplaces.CARPLACES) bo
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.CARPLACE) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -348,7 +348,7 @@ func (i2 InsertData) Houses(tableName string, i model_houses.HOUSES) bool {
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s','%s','%s','%s')", s.ID, s.OPERTYPEID, s.OBJECTGUID, s.CHANGEID, s.HOUSENUM, s.HOUSETYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OPERTYPEID, s.OBJECTGUID, s.CHANGEID, s.HOUSENUM, s.HOUSETYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.HOUSE) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -371,7 +371,7 @@ func (i2 InsertData) AddrObject(tableName string, i model_objectAddr.ADDRESSOBJE
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s','%d','%d','%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.OBJECT) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -394,7 +394,7 @@ func (i2 InsertData) Rooms(tableName string, i model_rooms.ROOMS) bool {
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.ROOMTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.ROOMTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.ROOM) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -417,7 +417,7 @@ func (i2 InsertData) Steads(tableName string, i model_steads.STEADS) bool {
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.STEAD) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -440,7 +440,7 @@ func (i2 InsertData) ObjectDivision(tableName string, i model_objectAddr.ITEMS) 
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s')", s.ID, s.PARENTID, s.CHILDID, s.CHANGEID, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s')", s.ID, s.PARENTID, s.CHILDID, s.CHANGEID, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.ITEM) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -463,7 +463,7 @@ func (i2 InsertData) ChangeHistory(tableName string, i model_other.CHANGEHISTORY
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%d','%s')", s.OBJECTID, s.ADROBJECTID, s.CHANGEID, s.OPERTYPEID, s.CHANGEDATE, s.NDOCID, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%d','%s')", s.OBJECTID, s.ADROBJECTID, s.CHANGEID, s.OPERTYPEID, s.CHANGEDATE, s.NDOCID, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.ITEM) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -486,7 +486,7 @@ func (i2 InsertData) NormDocs(tableName string, i model_other.NORMDOCS) bool {
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.NAME, s.NUMBER, s.TYPE, s.DATE, s.UPDATEDATE, s.KIND, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.NAME, s.NUMBER, s.TYPE, s.DATE, s.UPDATEDATE, s.KIND, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.NORMDOC) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)
@@ -509,7 +509,7 @@ func (i2 InsertData) ReestrObject(tableName string, i model_other.REESTROBJECTS)
 		if ind != 0 {
 			query = query + ", "
 		}
-		query = fmt.Sprintf("('%s','%s','%s','%s','%s','%s','%s')", s.OBJECTGUID, s.OBJECTGUID, s.CHANGEID, s.LEVELID, s.UPDATEDATE, s.CREATEDATE, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s')", s.OBJECTGUID, s.OBJECTGUID, s.CHANGEID, s.LEVELID, s.UPDATEDATE, s.CREATEDATE, s.Text)
 		if (ind%100) == 0 || ind+1 == len(i.OBJECT) {
 			query = queryPre + query[1:len(query)]
 			_, err := i2.db.Exec(query)

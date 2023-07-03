@@ -10,7 +10,7 @@ type REESTROBJECTS struct {
 		OBJECTID   string `xml:"OBJECTID,attr"`
 		OBJECTGUID string `xml:"OBJECTGUID,attr"`
 		CHANGEID   string `xml:"CHANGEID,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
 		LEVELID    string `xml:"LEVELID,attr"`
 		CREATEDATE string `xml:"CREATEDATE,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`

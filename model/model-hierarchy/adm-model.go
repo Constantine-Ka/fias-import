@@ -17,7 +17,7 @@ type ADMITEMS struct {
 		UPDATEDATE  string `xml:"UPDATEDATE,attr"`
 		STARTDATE   string `xml:"STARTDATE,attr"`
 		ENDDATE     string `xml:"ENDDATE,attr"`
-		ISACTIVE    string `xml:"ISACTIVE,attr"`
+		ISACTIVE    bool   `xml:"ISACTIVE,attr"`
 		PATH        string `xml:"PATH,attr"`
 	} `xml:"ITEM"`
 }

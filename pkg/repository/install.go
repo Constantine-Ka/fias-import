@@ -21,7 +21,7 @@ type CreatorTable struct {
 
 func (db *CreatorTable) AddrObject(tableName string, i model_objectAddr.ADDRESSOBJECTS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(    `id` INT NOT NULL,    `object_id` VARCHAR(255) NULL DEFAULT NULL,    `object_gid` VARCHAR(255) NULL DEFAULT NULL,    `change_id` INT(255) NULL DEFAULT NULL,    `name` VARCHAR(1023) NULL DEFAULT NULL,    `typename` VARCHAR(20) NULL DEFAULT NULL,    `level` VARCHAR(20) NULL DEFAULT NULL,    `oper_type_id` INT(255) NULL DEFAULT NULL,    `prev_id` INT NULL DEFAULT 0,    `next_id` INT NULL DEFAULT 0,    `update_date` DATE NULL DEFAULT NULL,    `start_date` DATE NULL DEFAULT NULL,    `end_date` DATE NULL DEFAULT NULL,    `is_active` INT NULL DEFAULT '1',    `is_actualve` INT NULL DEFAULT '1',    `text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB; ", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`name` VARCHAR(1023) NULL DEFAULT NULL,`typename` VARCHAR(20) NULL DEFAULT NULL,`level` VARCHAR(20) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT 0,`next_id` INT NULL DEFAULT 0,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL,`is_actualve` TINYINT NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB; ", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -34,7 +34,7 @@ func (db *CreatorTable) AddrObject(tableName string, i model_objectAddr.ADDRESSO
 
 func (db *CreatorTable) MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`parent_object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`oktmo` VARCHAR(20) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` INT NULL DEFAULT '1',`is_actualve` INT NULL DEFAULT '1',`path` VARCHAR(255) NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`parent_object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`oktmo` VARCHAR(20) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL,`is_actualve` TINYINT NULL DEFAULT NULL,`path` VARCHAR(255) NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -46,7 +46,7 @@ func (db *CreatorTable) MunHierarchy(tableName string, i model_hierarchy.MUNITEM
 
 func (db *CreatorTable) AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `object_id` VARCHAR(255) NULL DEFAULT NULL , `parent_object` VARCHAR(255) NULL DEFAULT NULL , `change_id` INT(255) NULL DEFAULT NULL , `region_code` VARCHAR(20) NULL DEFAULT NULL , `prev_id` INT NULL DEFAULT NULL , `next_id` INT NULL DEFAULT NULL , `update_date` DATE NULL DEFAULT NULL , `start_date` DATE NULL DEFAULT NULL , `end_date` DATE NULL DEFAULT NULL , `is_active` INT NULL DEFAULT '1' , `path` VARCHAR(255) NULL DEFAULT NULL , `text` VARCHAR(255) NULL DEFAULT NULL,PRIMARY KEY (`id`) ) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `object_id` VARCHAR(255) NULL DEFAULT NULL , `parent_object` VARCHAR(255) NULL DEFAULT NULL, `change_id` INT(255) NULL DEFAULT NULL , `region_code` VARCHAR(20) NULL DEFAULT NULL , `prev_id` INT NULL DEFAULT NULL , `next_id` INT NULL DEFAULT NULL, `update_date` DATE NULL DEFAULT NULL , `start_date` DATE NULL DEFAULT NULL , `end_date` DATE NULL DEFAULT NULL , `is_active` TINYINT NULL DEFAULT NULL, `path` VARCHAR(255) NULL DEFAULT NULL , `text` VARCHAR(255) NULL DEFAULT NULL,PRIMARY KEY (`id`) ) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -59,7 +59,7 @@ func (db *CreatorTable) AdmHierarchy(tableName string, i model_hierarchy.ADMITEM
 
 func (db *CreatorTable) Apartments(tableName string, i model_apartments.APARTMENTS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(    `id` INT NOT NULL,    `object_id` VARCHAR(255) NULL DEFAULT NULL,    `object_gid` VARCHAR(255) NULL DEFAULT NULL,    `change_id` INT(255) NULL DEFAULT NULL,    `number` VARCHAR(512) NULL DEFAULT NULL,    `apart_type` VARCHAR(20) NULL DEFAULT NULL,    `oper_type_id` INT(255) NULL DEFAULT NULL,    `prev_id` INT NULL DEFAULT NULL,    `next_id` INT NULL DEFAULT NULL,    `update_date` DATE NULL DEFAULT NULL,    `start_date` DATE NULL DEFAULT NULL,    `end_date` DATE NULL DEFAULT NULL,    `is_active` INT NULL DEFAULT '1',    `is_actualve` INT NULL DEFAULT '1',    `text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(512) NULL DEFAULT NULL,`apart_type` VARCHAR(20) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL, `prev_id` INT NULL DEFAULT NULL, `next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,    `end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL, `is_actualve` TINYINT NULL DEFAULT NULL, `text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -72,20 +72,19 @@ func (db *CreatorTable) Apartments(tableName string, i model_apartments.APARTMEN
 
 func (db *CreatorTable) Carplaces(tableName string, i model_carplaces.CARPLACES) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(    `id` INT NOT NULL,    `object_id` VARCHAR(255) NULL DEFAULT NULL,    `object_gid` VARCHAR(255) NULL DEFAULT NULL,    `change_id` INT(255) NULL DEFAULT NULL,    `number` VARCHAR(512) NULL DEFAULT NULL,    `oper_type_id` INT(255) NULL DEFAULT NULL,    `prev_id` INT NULL DEFAULT NULL,    `next_id` INT NULL DEFAULT NULL,    `update_date` DATE NULL DEFAULT NULL,    `start_date` DATE NULL DEFAULT NULL,    `end_date` DATE NULL DEFAULT NULL,    `is_active` INT NULL DEFAULT '1',    `is_actualve` INT NULL DEFAULT '1',    `text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(512) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL, `next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL,`is_actualve` TINYINT NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
 		logger.Error(err)
 		return false
 	}
-
 	return true
 }
 
 func (db *CreatorTable) Houses(tableName string, i model_houses.HOUSES) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(512) NULL DEFAULT NULL,`house_num` VARCHAR(20) NULL DEFAULT NULL,`house_type` VARCHAR(20) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` INT NULL DEFAULT '1',`is_actualve` INT NULL DEFAULT '1',`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(512) NULL DEFAULT NULL,`house_num` VARCHAR(20) NULL DEFAULT NULL,`house_type` VARCHAR(20) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL,`is_actualve` TINYINT NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -111,7 +110,7 @@ func (db *CreatorTable) ObjectDivision(tableName string, i model_objectAddr.ITEM
 
 func (db *CreatorTable) Rooms(tableName string, i model_rooms.ROOMS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(512) NULL DEFAULT NULL,`room_type` VARCHAR(20) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` INT NULL DEFAULT '1',`is_actualve` INT NULL DEFAULT '1',`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(512) NULL DEFAULT NULL,`room_type` VARCHAR(20) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL,`is_actualve` TINYINT NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -124,7 +123,7 @@ func (db *CreatorTable) Rooms(tableName string, i model_rooms.ROOMS) bool {
 
 func (db *CreatorTable) Steads(tableName string, i model_steads.STEADS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(256) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` INT NULL DEFAULT '1',`is_actualve` INT NULL DEFAULT '1',`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT NOT NULL,`object_id` VARCHAR(255) NULL DEFAULT NULL,`object_gid` VARCHAR(255) NULL DEFAULT NULL,`change_id` INT(255) NULL DEFAULT NULL,`number` VARCHAR(256) NULL DEFAULT NULL,`oper_type_id` INT(255) NULL DEFAULT NULL,`prev_id` INT NULL DEFAULT NULL,`next_id` INT NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`start_date` DATE NULL DEFAULT NULL,`end_date` DATE NULL DEFAULT NULL,`is_active` TINYINT NULL DEFAULT NULL,`is_actualve` TINYINT NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL) ENGINE = InnoDB;;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -150,7 +149,7 @@ func (db *CreatorTable) ChangeHistory(tableName string, i model_other.CHANGEHIST
 
 func (db *CreatorTable) NormDocs(tableName string, i model_other.NORMDOCS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT(11) NOT NULL AUTO_INCREMENT ,`name` VARCHAR(512) NULL DEFAULT NULL,`number` VARCHAR(1024) NULL DEFAULT NULL,`type` VARCHAR(255) NULL DEFAULT NULL,`date` DATE NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`kind` VARCHAR(255) NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL, add PRIMARY KEY (`id`)) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s`(`id` INT(11) NOT NULL AUTO_INCREMENT ,`name` VARCHAR(512) NULL DEFAULT NULL,`number` VARCHAR(1024) NULL DEFAULT NULL,`type` VARCHAR(255) NULL DEFAULT NULL,`date` DATE NULL DEFAULT NULL,`update_date` DATE NULL DEFAULT NULL,`kind` VARCHAR(255) NULL DEFAULT NULL,`text` VARCHAR(255) NULL DEFAULT NULL,  PRIMARY KEY (`id`)) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -176,7 +175,7 @@ func (db *CreatorTable) ReestrObject(tableName string, i model_other.REESTROBJEC
 
 func (db *CreatorTable) Paramtypes(tableName string, i model.PARAMTYPES) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `enddate` DATE NULL DEFAULT NULL , `startdate` DATE NULL DEFAULT NULL , `updatedate` DATE NULL DEFAULT NULL , `isactive` BOOLEAN NULL DEFAULT TRUE, `code` TEXT NULL DEFAULT NULL , `description` VARCHAR(255) NOT NULL , `name` VARCHAR(255) NOT NULL , `text` VARCHAR(512) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `enddate` DATE NULL DEFAULT NULL , `startdate` DATE NULL DEFAULT NULL , `updatedate` DATE NULL DEFAULT NULL , `isactive` TINYINT NULL DEFAULT NULL, `code` TEXT NULL DEFAULT NULL , `description` VARCHAR(255) NOT NULL , `name` VARCHAR(255) NOT NULL , `text` VARCHAR(512) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)
@@ -213,7 +212,7 @@ func (db *CreatorTable) Ndockinds(tableName string, i model.NDOCKINDS) bool {
 
 func (db *CreatorTable) Addressobjecttypes(tableName string, i model.DICTALL) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `isactive` VARCHAR(6) NULL DEFAULT true, `enddate` DATE NULL , `startdate` DATE NULL DEFAULT NULL , `updatedate` DATE NULL DEFAULT NULL , `description` VARCHAR(255)  NULL DEFAULT NULL , `shortname` VARCHAR(255) NULL DEFAULT NULL , `name` VARCHAR(512) NULL DEFAULT NULL , `level` INT NULL DEFAULT NULL , `text` VARCHAR(225) NULL DEFAULT NULL) ENGINE = InnoDB;\n", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `isactive` TINYINT NULL DEFAULT NULL, `enddate` DATE NULL , `startdate` DATE NULL DEFAULT NULL , `updatedate` DATE NULL DEFAULT NULL , `description` VARCHAR(255)  NULL DEFAULT NULL , `shortname` VARCHAR(255) NULL DEFAULT NULL , `name` VARCHAR(512) NULL DEFAULT NULL , `level` INT NULL DEFAULT NULL , `text` VARCHAR(225) NULL DEFAULT NULL) ENGINE = InnoDB;\n", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)

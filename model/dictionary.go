@@ -24,7 +24,7 @@ type ADDRESSOBJECTTYPES struct {
 	Text              string   `xml:",chardata"`
 	ADDRESSOBJECTTYPE []struct {
 		Text       string `xml:",chardata"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
 		ISACTIVEN  string
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
@@ -46,7 +46,7 @@ type APARTMENTTYPES struct {
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
-		ISACTIVEN  int64
+		ISACTIVEN  bool
 		DESC       string `xml:"DESC,attr"`
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 		NAME       string `xml:"NAME,attr"`

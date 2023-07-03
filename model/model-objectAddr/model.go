@@ -20,7 +20,7 @@ type ADDRESSOBJECTS struct {
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
-		ISACTUAL   int8   `xml:"ISACTUAL,attr"`
-		ISACTIVE   int8   `xml:"ISACTIVE,attr"`
+		ISACTUAL   bool   `xml:"ISACTUAL,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
 	} `xml:"OBJECT"`
 }

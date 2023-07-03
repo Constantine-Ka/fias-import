@@ -19,7 +19,7 @@ type APARTMENTS struct {
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		ENDDATE    string `xml:"ENDDATE,attr"`
-		ISACTUAL   string `xml:"ISACTUAL,attr"`
-		ISACTIVE   string `xml:"ISACTIVE,attr"`
+		ISACTUAL   bool   `xml:"ISACTUAL,attr"`
+		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
 	} `xml:"APARTMENT"`
 }
