@@ -1,17 +1,17 @@
 basic:
-  filepath: "/mnt/disk/files/fias"
+  filepath: "/mnt/disk/files/gar_xml"
   prefix: "all"
 db:
   driver: "mysql"
-  username: "konstantine"
-  password: "23981487"
-  host: "localhost"
-  port: "6033"
-  dbname: "fias2"
+  username: "genesis"
+  password: "N2s3I8g7"
+  host: "192.168.0.99"
+  port: "3306"
+  dbname: "fias"
   sslmode: "disable"
 
 SFTP:
-  host: 91.219.102.77
+  host: 192.168.0.99
   username: web
   password: np6aGzq5
   port: 22

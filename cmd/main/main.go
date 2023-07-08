@@ -35,7 +35,7 @@ func main() {
 
 	//-------------------------------`-------
 	//Инициализация Флагов
-	file := flag.String("zipfile", vp.GetString("basic.filepath"), "Путь к файлу")
+	file := flag.String("file", vp.GetString("basic.filepath"), "Путь к файлу")
 	prefix := flag.String("prefix", vp.GetString("basic.prefix"), "Что парсить")
 	//---Варианты префиксов
 	// @param dict

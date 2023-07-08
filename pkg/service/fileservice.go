@@ -17,7 +17,6 @@ import (
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 	"log"
-	"os"
 	"regexp"
 )
 
@@ -51,8 +50,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 		//}
 		if regexp.MustCompile(`AS_ADDR_OBJ_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobj") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -62,8 +61,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.AddrObject(cfg.Tablename.Content.AddrObject, ParserAddrObj(fileReader))
 		} else if regexp.MustCompile(`AS_ADDR_OBJ_DIVISION_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobjdiv") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -73,8 +72,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.ObjectDivision(cfg.Tablename.Content.ObjectDivision, ParserAddrObjDivision(fileReader))
 		} else if regexp.MustCompile(`AS_ADDR_OBJ_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobjp") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -84,8 +83,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Params(cfg.Tablename.Content.AddrObjectP, ParserParams(fileReader))
 		} else if regexp.MustCompile(`AS_ADM_HIERARCHY_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "hierarchyadm") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -95,8 +94,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.AdmHierarchy(cfg.Tablename.Content.AdmHierarchy, ParserAdmHieRarchy(fileReader))
 		} else if regexp.MustCompile(`AS_APARTMENTS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "appartments") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -106,8 +105,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Apartments(cfg.Tablename.Content.Apartments, ParserApartments(fileReader))
 		} else if regexp.MustCompile(`AS_APARTMENTS_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "appartmentsp") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -117,8 +116,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Params(cfg.Tablename.Content.ApartmentsP, ParserParams(fileReader))
 		} else if regexp.MustCompile(`AS_CARPLACES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "carplaces") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -128,8 +127,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Carplaces(cfg.Tablename.Content.Carplaces, ParserCarplaces(fileReader))
 		} else if regexp.MustCompile(`AS_CARPLACES_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "carplacesp") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -139,8 +138,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Params(cfg.Tablename.Content.CarplacesP, ParserParams(fileReader))
 		} else if regexp.MustCompile(`AS_CHANGE_HISTORY_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "history") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -151,8 +150,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 
 		} else if regexp.MustCompile(`AS_HOUSES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "houses") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -162,8 +161,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Houses(cfg.Tablename.Content.Houses, ParserHouses(fileReader))
 		} else if regexp.MustCompile(`AS_HOUSES_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "housesp") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -173,8 +172,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Params(cfg.Tablename.Content.HousesP, ParserParams(fileReader))
 		} else if regexp.MustCompile(`AS_MUN_HIERARCHY_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "hierarchymun") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -184,8 +183,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.MunHierarchy(cfg.Tablename.Content.MunHierarchy, parserMunHieRarchy(fileReader))
 		} else if regexp.MustCompile(`AS_NORMATIVE_DOCS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "normativedocs") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -195,8 +194,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.NormDocs(cfg.Tablename.Content.NormDocs, ParserNDocs(fileReader))
 		} else if regexp.MustCompile(`AS_REESTR_OBJECTS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "reestrobj") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -207,8 +206,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.ReestrObject(cfg.Tablename.Content.ReestrObject, ParserReestrObj(fileReader))
 		} else if regexp.MustCompile(`AS_ROOMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "rooms") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -219,8 +218,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 
 		} else if regexp.MustCompile(`AS_ROOMS_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "roomsp") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -230,8 +229,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Params(cfg.Tablename.Content.RoomsP, ParserParams(fileReader))
 		} else if regexp.MustCompile(`AS_STEADS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "steads") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -241,8 +240,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Steads(cfg.Tablename.Content.Steads, ParserSteads(fileReader))
 		} else if regexp.MustCompile(`AS_STEADS_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "steads") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -252,8 +251,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Params(cfg.Tablename.Content.SteadsP, ParserParams(fileReader))
 		} else if regexp.MustCompile(`AS_ADDHOUSE_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -263,8 +262,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Addressobjecttypes(cfg.Tablename.Dict.AddHouseTypes, parserObjectType(fileReader, "ADDHOUSE"))
 		} else if regexp.MustCompile(`AS_ADDR_OBJ_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -276,8 +275,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Addressobjecttypes(cfg.Tablename.Dict.AddressObjectTypes, parserObjectType(fileReader, "ADDR_OBJ"))
 		} else if regexp.MustCompile(`AS_APARTMENT_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -287,8 +286,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Addressobjecttypes(cfg.Tablename.Dict.ApartmentTypes, parserObjectType(fileReader, "APARTMENT"))
 		} else if regexp.MustCompile(`AS_HOUSE_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -298,8 +297,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Addressobjecttypes(cfg.Tablename.Dict.HouseTypes, parserObjectType(fileReader, "HOUSE"))
 		} else if regexp.MustCompile(`AS_NORMATIVE_DOCS_KINDS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -309,8 +308,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Ndockinds(cfg.Tablename.Dict.NDockInds, ParserNdocsInd(fileReader))
 		} else if regexp.MustCompile(`AS_NORMATIVE_DOCS_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -320,8 +319,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Ndoctypes(cfg.Tablename.Dict.NDocTypes, ParserNdocsType(fileReader))
 		} else if regexp.MustCompile(`AS_OBJECT_LEVELS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -332,8 +331,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Addressobjecttypes(cfg.Tablename.Dict.LevelsTypes, parserObjectType(fileReader, "LEVELS"))
 		} else if regexp.MustCompile(`AS_OPERATION_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -343,8 +342,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Addressobjecttypes(cfg.Tablename.Dict.OperationTypes, parserObjectType(fileReader, "OPERATION"))
 		} else if regexp.MustCompile(`AS_PARAM_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -354,8 +353,8 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 			s.repo.Inserter.Paramtypes(cfg.Tablename.Dict.ParamTypes, ParserParamTypes(fileReader))
 		} else if regexp.MustCompile(`AS_ROOM_TYPES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "dict") {
 			log.Println("Обрабатывается файл:", f)
-			//fileReader, err := sftpC.Open(f)
-			fileReader, err := os.Open(f)
+			fileReader, err := sftpC.Open(f)
+			//fileReader, err := os.Open(f)
 			if err != nil {
 				logger.Error(err)
 			}
@@ -375,16 +374,16 @@ func getListFile(sftpClient *sftp.Client, dir string) []string {
 	logger := logging.GetLogger()
 	log.Println(dir)
 	//log.Println(stat.IsDir())
-	//dirList, err := sftpClient.ReadDir(dir)
-	dirList, err := os.ReadDir(dir)
+	dirList, err := sftpClient.ReadDir(dir)
+	//dirList, err := os.ReadDir(dir)
 	if err != nil {
 		logger.Error(err)
 	}
 	var dirArr []string
 	for _, info := range dirList {
 		if info.IsDir() {
-			//tempdir, _ := sftpClient.ReadDir(dir + "/" + info.Name())
-			tempdir, _ := os.ReadDir(dir + "/" + info.Name())
+			tempdir, _ := sftpClient.ReadDir(dir + "/" + info.Name())
+			//tempdir, _ := os.ReadDir(dir + "/" + info.Name())
 			for _, fileInfo := range tempdir {
 				dirArr = append(dirArr, dir+"/"+info.Name()+"/"+fileInfo.Name())
 			}
