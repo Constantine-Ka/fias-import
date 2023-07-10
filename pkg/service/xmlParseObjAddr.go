@@ -14,9 +14,9 @@ import (
 	model_steads "fias-import_byLondon/model/model-steads"
 	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/utills/logging"
-	"github.com/pkg/sftp"
 	"io"
 	"log"
+	"os"
 )
 
 type XMLServices struct {
@@ -34,12 +34,12 @@ func streamToByte(stream io.Reader) []byte {
 	return buf.Bytes()
 }
 
-func StreamToString(stream *sftp.File) string {
+func StreamToString(stream *os.File) string {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(stream)
 	return buf.String()
 }
-func ParserParams(fileReader *sftp.File) model.PARAMS {
+func ParserParams(fileReader *os.File) model.PARAMS {
 	logger := logging.GetLogger()
 	var result model.PARAMS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -59,7 +59,7 @@ func ParserParams(fileReader *sftp.File) model.PARAMS {
 	}
 	return result
 }
-func ParserAddrObj(fileReader *sftp.File) model_objectAddr.ADDRESSOBJECTS {
+func ParserAddrObj(fileReader *os.File) model_objectAddr.ADDRESSOBJECTS {
 	logger := logging.GetLogger()
 	var result model_objectAddr.ADDRESSOBJECTS
 	//byteFile := StreamToString(fileReader)
@@ -81,7 +81,7 @@ func ParserAddrObj(fileReader *sftp.File) model_objectAddr.ADDRESSOBJECTS {
 	return result
 }
 
-func ParserAddrObjDivision(fileReader *sftp.File) model_objectAddr.ITEMS {
+func ParserAddrObjDivision(fileReader *os.File) model_objectAddr.ITEMS {
 	logger := logging.GetLogger()
 	var result model_objectAddr.ITEMS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -102,7 +102,7 @@ func ParserAddrObjDivision(fileReader *sftp.File) model_objectAddr.ITEMS {
 	}
 	return result
 }
-func ParserAdmHieRarchy(fileReader *sftp.File) model_hierarchy.ADMITEMS {
+func ParserAdmHieRarchy(fileReader *os.File) model_hierarchy.ADMITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.ADMITEMS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -123,7 +123,7 @@ func ParserAdmHieRarchy(fileReader *sftp.File) model_hierarchy.ADMITEMS {
 	}
 	return result
 }
-func ParserApartments(fileReader *sftp.File) model_apartments.APARTMENTS {
+func ParserApartments(fileReader *os.File) model_apartments.APARTMENTS {
 	logger := logging.GetLogger()
 	var result model_apartments.APARTMENTS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -145,7 +145,7 @@ func ParserApartments(fileReader *sftp.File) model_apartments.APARTMENTS {
 	return result
 }
 
-func ParserCarplaces(fileReader *sftp.File) model_carplaces.CARPLACES {
+func ParserCarplaces(fileReader *os.File) model_carplaces.CARPLACES {
 	logger := logging.GetLogger()
 	var result model_carplaces.CARPLACES
 	contentBytes, err := io.ReadAll(fileReader)
@@ -165,7 +165,7 @@ func ParserCarplaces(fileReader *sftp.File) model_carplaces.CARPLACES {
 	}
 	return result
 }
-func ParserHouses(fileReader *sftp.File) model_houses.HOUSES {
+func ParserHouses(fileReader *os.File) model_houses.HOUSES {
 	logger := logging.GetLogger()
 	var result model_houses.HOUSES
 	contentBytes, err := io.ReadAll(fileReader)
@@ -185,7 +185,7 @@ func ParserHouses(fileReader *sftp.File) model_houses.HOUSES {
 	}
 	return result
 }
-func parserMunHieRarchy(fileReader *sftp.File) model_hierarchy.MUNITEMS {
+func parserMunHieRarchy(fileReader *os.File) model_hierarchy.MUNITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.MUNITEMS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -206,7 +206,7 @@ func parserMunHieRarchy(fileReader *sftp.File) model_hierarchy.MUNITEMS {
 	}
 	return result
 }
-func ParserReestrObj(fileReader *sftp.File) model_other.REESTROBJECTS {
+func ParserReestrObj(fileReader *os.File) model_other.REESTROBJECTS {
 	logger := logging.GetLogger()
 	var result model_other.REESTROBJECTS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -226,7 +226,7 @@ func ParserReestrObj(fileReader *sftp.File) model_other.REESTROBJECTS {
 	}
 	return result
 }
-func ParserRooms(fileReader *sftp.File) model_rooms.ROOMS {
+func ParserRooms(fileReader *os.File) model_rooms.ROOMS {
 	logger := logging.GetLogger()
 	var result model_rooms.ROOMS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -247,7 +247,7 @@ func ParserRooms(fileReader *sftp.File) model_rooms.ROOMS {
 	}
 	return result
 }
-func ParserSteads(fileReader *sftp.File) model_steads.STEADS {
+func ParserSteads(fileReader *os.File) model_steads.STEADS {
 	logger := logging.GetLogger()
 	var result model_steads.STEADS
 	contentBytes, err := io.ReadAll(fileReader)
@@ -268,7 +268,7 @@ func ParserSteads(fileReader *sftp.File) model_steads.STEADS {
 	}
 	return result
 }
-func ParserChangeH(fileReader *sftp.File) model_other.CHANGEHISTORY {
+func ParserChangeH(fileReader *os.File) model_other.CHANGEHISTORY {
 	logger := logging.GetLogger()
 	logger.Info("😊😊")
 	var result model_other.CHANGEHISTORY
@@ -291,7 +291,7 @@ func ParserChangeH(fileReader *sftp.File) model_other.CHANGEHISTORY {
 	}
 	return result
 }
-func ParserNDocs(fileReader *sftp.File) model_other.NORMDOCS {
+func ParserNDocs(fileReader *os.File) model_other.NORMDOCS {
 	logger := logging.GetLogger()
 	var result model_other.NORMDOCS
 	//byteFile := StreamToString(fileReader)
@@ -313,7 +313,7 @@ func ParserNDocs(fileReader *sftp.File) model_other.NORMDOCS {
 	}
 	return result
 }
-func parserObjectType(fileReader *sftp.File, t string) model.DICTALL {
+func parserObjectType(fileReader *os.File, t string) model.DICTALL {
 	logger := logging.GetLogger()
 	//byteFile := StreamToString(fileReader)
 	contentBytes, err := io.ReadAll(fileReader)
@@ -351,7 +351,7 @@ func parserObjectType(fileReader *sftp.File, t string) model.DICTALL {
 	}
 	return result
 }
-func ParserNdocsType(fileReader *sftp.File) model.NDOCTYPES {
+func ParserNdocsType(fileReader *os.File) model.NDOCTYPES {
 	logger := logging.GetLogger()
 	var result model.NDOCTYPES
 	//byteFile := StreamToString(fileReader)
@@ -374,7 +374,7 @@ func ParserNdocsType(fileReader *sftp.File) model.NDOCTYPES {
 	return result
 
 }
-func ParserNdocsInd(fileReader *sftp.File) model.NDOCKINDS {
+func ParserNdocsInd(fileReader *os.File) model.NDOCKINDS {
 	logger := logging.GetLogger()
 	var result model.NDOCKINDS
 	//byteFile := StreamToString(fileReader)
@@ -396,7 +396,7 @@ func ParserNdocsInd(fileReader *sftp.File) model.NDOCKINDS {
 	}
 	return result
 }
-func ParserParamTypes(fileReader *sftp.File) model.PARAMTYPES {
+func ParserParamTypes(fileReader *os.File) model.PARAMTYPES {
 	logger := logging.GetLogger()
 	var result model.PARAMTYPES
 	//byteFile := StreamToString(fileReader)
