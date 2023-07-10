@@ -28,8 +28,8 @@ func main() {
 			err))
 	}
 	sftpClient, sshClient := handler.CreateConnection(*vp)
-	defer sftpClient.Close()
-	defer sshClient.Close()
+	sftpClient.Close()
+	sshClient.Close()
 	//sftpClient.Wait()
 	//config.GetConf()
 
@@ -83,9 +83,11 @@ func main() {
 	logger.Infoln("Запущено")
 
 	//services.InstallServices.NewTables()
+	//_ = services.Unpacking(*file, *prefix, sftpClient, sshClient)
+
 	_ = services.Unpacking(*file, *prefix, sftpClient, sshClient)
-	sftpClient.Close()
-	sshClient.Close()
+	//sftpClient.Close()
+	//sshClient.Close()
 	//for _, name := range names {
 	//	log.Println(name)
 	//}
