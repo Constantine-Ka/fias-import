@@ -28,8 +28,8 @@ func main() {
 			err))
 	}
 	sftpClient, sshClient := handler.CreateConnection(*vp)
-	defer sftpClient.Close()
-	defer sshClient.Close()
+	sftpClient.Close()
+	sshClient.Close()
 	//sftpClient.Wait()
 	//config.GetConf()
 
