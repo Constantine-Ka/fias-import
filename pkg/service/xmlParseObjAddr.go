@@ -14,6 +14,7 @@ import (
 	model_steads "fias-import_byLondon/model/model-steads"
 	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/utills/logging"
+	"github.com/pkg/sftp"
 	"io"
 	"log"
 )
@@ -33,16 +34,24 @@ func streamToByte(stream io.Reader) []byte {
 	return buf.Bytes()
 }
 
-func StreamToString(stream io.Reader) string {
+func StreamToString(stream *sftp.File) string {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(stream)
 	return buf.String()
 }
-func ParserParams(fileReader io.Reader) model.PARAMS {
+func ParserParams(fileReader *sftp.File) model.PARAMS {
 	logger := logging.GetLogger()
 	var result model.PARAMS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -50,11 +59,20 @@ func ParserParams(fileReader io.Reader) model.PARAMS {
 	}
 	return result
 }
-func ParserAddrObj(fileReader io.Reader) model_objectAddr.ADDRESSOBJECTS {
+func ParserAddrObj(fileReader *sftp.File) model_objectAddr.ADDRESSOBJECTS {
 	logger := logging.GetLogger()
 	var result model_objectAddr.ADDRESSOBJECTS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -63,11 +81,20 @@ func ParserAddrObj(fileReader io.Reader) model_objectAddr.ADDRESSOBJECTS {
 	return result
 }
 
-func ParserAddrObjDivision(fileReader io.Reader) model_objectAddr.ITEMS {
+func ParserAddrObjDivision(fileReader *sftp.File) model_objectAddr.ITEMS {
 	logger := logging.GetLogger()
 	var result model_objectAddr.ITEMS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -75,11 +102,20 @@ func ParserAddrObjDivision(fileReader io.Reader) model_objectAddr.ITEMS {
 	}
 	return result
 }
-func ParserAdmHieRarchy(fileReader io.Reader) model_hierarchy.ADMITEMS {
+func ParserAdmHieRarchy(fileReader *sftp.File) model_hierarchy.ADMITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.ADMITEMS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -87,11 +123,20 @@ func ParserAdmHieRarchy(fileReader io.Reader) model_hierarchy.ADMITEMS {
 	}
 	return result
 }
-func ParserApartments(fileReader io.Reader) model_apartments.APARTMENTS {
+func ParserApartments(fileReader *sftp.File) model_apartments.APARTMENTS {
 	logger := logging.GetLogger()
 	var result model_apartments.APARTMENTS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -100,11 +145,19 @@ func ParserApartments(fileReader io.Reader) model_apartments.APARTMENTS {
 	return result
 }
 
-func ParserCarplaces(fileReader io.Reader) model_carplaces.CARPLACES {
+func ParserCarplaces(fileReader *sftp.File) model_carplaces.CARPLACES {
 	logger := logging.GetLogger()
 	var result model_carplaces.CARPLACES
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -112,11 +165,19 @@ func ParserCarplaces(fileReader io.Reader) model_carplaces.CARPLACES {
 	}
 	return result
 }
-func ParserHouses(fileReader io.Reader) model_houses.HOUSES {
+func ParserHouses(fileReader *sftp.File) model_houses.HOUSES {
 	logger := logging.GetLogger()
 	var result model_houses.HOUSES
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -124,11 +185,20 @@ func ParserHouses(fileReader io.Reader) model_houses.HOUSES {
 	}
 	return result
 }
-func parserMunHieRarchy(fileReader io.Reader) model_hierarchy.MUNITEMS {
+func parserMunHieRarchy(fileReader *sftp.File) model_hierarchy.MUNITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.MUNITEMS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -136,11 +206,19 @@ func parserMunHieRarchy(fileReader io.Reader) model_hierarchy.MUNITEMS {
 	}
 	return result
 }
-func ParserReestrObj(fileReader io.Reader) model_other.REESTROBJECTS {
+func ParserReestrObj(fileReader *sftp.File) model_other.REESTROBJECTS {
 	logger := logging.GetLogger()
 	var result model_other.REESTROBJECTS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -148,11 +226,20 @@ func ParserReestrObj(fileReader io.Reader) model_other.REESTROBJECTS {
 	}
 	return result
 }
-func ParserRooms(fileReader io.Reader) model_rooms.ROOMS {
+func ParserRooms(fileReader *sftp.File) model_rooms.ROOMS {
 	logger := logging.GetLogger()
 	var result model_rooms.ROOMS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -160,11 +247,20 @@ func ParserRooms(fileReader io.Reader) model_rooms.ROOMS {
 	}
 	return result
 }
-func ParserSteads(fileReader io.Reader) model_steads.STEADS {
+func ParserSteads(fileReader *sftp.File) model_steads.STEADS {
 	logger := logging.GetLogger()
 	var result model_steads.STEADS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -172,11 +268,22 @@ func ParserSteads(fileReader io.Reader) model_steads.STEADS {
 	}
 	return result
 }
-func ParserChangeH(fileReader io.Reader) model_other.CHANGEHISTORY {
+func ParserChangeH(fileReader *sftp.File) model_other.CHANGEHISTORY {
 	logger := logging.GetLogger()
+	logger.Info("😊😊")
 	var result model_other.CHANGEHISTORY
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -184,11 +291,21 @@ func ParserChangeH(fileReader io.Reader) model_other.CHANGEHISTORY {
 	}
 	return result
 }
-func ParserNDocs(fileReader io.Reader) model_other.NORMDOCS {
+func ParserNDocs(fileReader *sftp.File) model_other.NORMDOCS {
 	logger := logging.GetLogger()
 	var result model_other.NORMDOCS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -196,28 +313,36 @@ func ParserNDocs(fileReader io.Reader) model_other.NORMDOCS {
 	}
 	return result
 }
-func parserObjectType(fileReader io.Reader, t string) model.DICTALL {
+func parserObjectType(fileReader *sftp.File, t string) model.DICTALL {
 	logger := logging.GetLogger()
-	byteFile := StreamToString(fileReader)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
 	var result model.DICTALL
-	var err error
 	switch t {
 	case "ADDHOUSE":
-		err = xml.Unmarshal([]byte(byteFile), &result.ADDHOUSETYPES)
+		err = xml.Unmarshal(contentBytes, &result.ADDHOUSETYPES)
 	case "ADDR_OBJ":
 		log.Println("😦")
-		log.Println(byteFile)
-		err = xml.Unmarshal([]byte(byteFile), &result.ADDRESSOBJECTTYPE)
+		log.Println(string(contentBytes))
+		err = xml.Unmarshal(contentBytes, &result.ADDRESSOBJECTTYPE)
 	case "APARTMENT":
-		err = xml.Unmarshal([]byte(byteFile), &result.APARTMENTTYPES)
+		err = xml.Unmarshal(contentBytes, &result.APARTMENTTYPES)
 	case "HOUSE":
-		err = xml.Unmarshal([]byte(byteFile), &result.HOUSETYPES)
+		err = xml.Unmarshal(contentBytes, &result.HOUSETYPES)
 	case "LEVELS":
-		err = xml.Unmarshal([]byte(byteFile), &result.OBJECTLEVELS)
+		err = xml.Unmarshal(contentBytes, &result.OBJECTLEVELS)
 	case "OPERATION":
-		err = xml.Unmarshal([]byte(byteFile), &result.OPERATIONTYPES)
+		err = xml.Unmarshal(contentBytes, &result.OPERATIONTYPES)
 	case "ROOM":
-		err = xml.Unmarshal([]byte(byteFile), &result.ROOMTYPES)
+		err = xml.Unmarshal(contentBytes, &result.ROOMTYPES)
 	}
 	if err != nil {
 		if err != io.EOF {
@@ -226,11 +351,21 @@ func parserObjectType(fileReader io.Reader, t string) model.DICTALL {
 	}
 	return result
 }
-func ParserNdocsType(fileReader io.Reader) model.NDOCTYPES {
+func ParserNdocsType(fileReader *sftp.File) model.NDOCTYPES {
 	logger := logging.GetLogger()
 	var result model.NDOCTYPES
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -239,11 +374,21 @@ func ParserNdocsType(fileReader io.Reader) model.NDOCTYPES {
 	return result
 
 }
-func ParserNdocsInd(fileReader io.Reader) model.NDOCKINDS {
+func ParserNdocsInd(fileReader *sftp.File) model.NDOCKINDS {
 	logger := logging.GetLogger()
 	var result model.NDOCKINDS
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)
@@ -251,11 +396,22 @@ func ParserNdocsInd(fileReader io.Reader) model.NDOCKINDS {
 	}
 	return result
 }
-func ParserParamTypes(fileReader io.Reader) model.PARAMTYPES {
+func ParserParamTypes(fileReader *sftp.File) model.PARAMTYPES {
 	logger := logging.GetLogger()
 	var result model.PARAMTYPES
-	byteFile := StreamToString(fileReader)
-	err := xml.Unmarshal([]byte(byteFile), &result)
+	//byteFile := StreamToString(fileReader)
+	contentBytes, err := io.ReadAll(fileReader)
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Println("😃😃😃")
+	err = fileReader.Close()
+	if err != nil {
+		logger.Error(err)
+	}
+	logger.Infoln("Файл закрыт")
+	logger.Infoln("Файл закрыт")
+	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
 			logger.Error(err)

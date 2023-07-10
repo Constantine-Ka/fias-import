@@ -84,6 +84,8 @@ func main() {
 
 	//services.InstallServices.NewTables()
 	_ = services.Unpacking(*file, *prefix, sftpClient, sshClient)
+	sftpClient.Close()
+	sshClient.Close()
 	//for _, name := range names {
 	//	log.Println(name)
 	//}
