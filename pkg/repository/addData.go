@@ -13,6 +13,7 @@ import (
 	"fias-import_byLondon/utills/logging"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"strings"
 )
 
 type InsertData struct {
@@ -228,6 +229,7 @@ func (i2 InsertData) Params(tableName string, i model.PARAMS) bool {
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `change_id`, `change_id_end`, `type_id`, `value`, `update_date`, `start_date`, `end_date`) VALUES ", tableName)
 	var query string
 	for ind, s := range i.PARAM {
+		strings.ReplaceAll(strings.ReplaceAll(s.VALUE, "ж\\", ":"), "\\", "")
 		if ind != 0 {
 			query = query + ", "
 		}

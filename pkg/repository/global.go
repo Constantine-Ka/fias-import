@@ -4,6 +4,7 @@ import (
 	"fias-import_byLondon/utills/logging"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"log"
 )
 
 type GlobalSetting struct {
@@ -36,7 +37,7 @@ func (g GlobalSetting) ListTable() []string {
 		logger.Info("SHOW TABLES")
 		logger.Error(err)
 	}
-	logger.Info(len(result))
+	log.Println(len(result))
 	return result
 }
 
