@@ -20,6 +20,31 @@ type InsertData struct {
 	db *sqlx.DB
 }
 
+func (i2 InsertData) ParamOne(tableName string, i []model.ParamNode) bool {
+	//TODO implement me
+	logger := logging.GetLogger()
+	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `change_id`, `change_id_end`, `type_id`, `value`, `update_date`, `start_date`, `end_date`) VALUES ", tableName)
+	var query string
+	for ind, s := range i {
+		strings.ReplaceAll(strings.ReplaceAll(s.VALUE, "ж\\", ":"), "\\", "")
+		if ind != 0 {
+			query = query + ", "
+		}
+		query = query + fmt.Sprintf(" ('%d','%s','%s','%s','%d','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.CHANGEID, s.CHANGEIDEND, s.TYPEID, s.VALUE, s.UPDATEDATE, s.STARTDATE, s.ENDDATE)
+		if (ind%100) == 0 || ind+1 == len(i) {
+			query = queryPre + query[1:len(query)]
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			query = ""
+		}
+	}
+	return true
+}
+
 func (i2 InsertData) Paramtypes(tableName string, i model.PARAMTYPES) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `enddate`, `startdate`, `updatedate`, `isactive`, `code`, `description`, `name`, `text`) VALUES ", tableName)

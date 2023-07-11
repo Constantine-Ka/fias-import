@@ -23,12 +23,7 @@ type dict interface {
 	Ndockinds(tableName string, i model.NDOCKINDS) bool
 	Addressobjecttypes(tableName string, i model.DICTALL) bool
 }
-type dictInsert interface {
-	//Paramtypes(tableName string, i interface{}) bool
-	//Ndoctypes(tableName string, i interface{}) bool
-	//Ndockinds(tableName string, i interface{}) bool
-	//Addressobjecttypes(tableName string, i interface{}) bool
-}
+
 type content interface {
 	Params(tableName string, i model.PARAMS) bool
 	AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool
@@ -52,6 +47,7 @@ type CreateTable interface {
 type Inserter interface {
 	content
 	dict
+	ParamOne(tableName string, i []model.ParamNode) bool
 }
 type Repository struct {
 	CreateTable
