@@ -49,13 +49,7 @@ func ParserParams(fileReader *os.File, tablename string, r *repository.Repositor
 				count++
 				tmpResult := utills.XmlElemToParam(element)
 				switch tmpResult.TYPEID {
-				case 5:
-				case 7:
-				case 10:
-				case 11:
-				case 12:
-				case 13:
-				case 19:
+				case 5, 7, 10, 11, 12, 13, 19:
 					result = append(result, tmpResult)
 				}
 				if count == 100 {
