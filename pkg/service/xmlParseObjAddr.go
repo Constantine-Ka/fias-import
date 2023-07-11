@@ -1,8 +1,8 @@
 package service
 
 import (
-	"bytes"
 	"encoding/xml"
+	"errors"
 	"fias-import_byLondon/model"
 	model_apartments "fias-import_byLondon/model/model-apartments"
 	model_carplaces "fias-import_byLondon/model/model-carplaces"
@@ -23,39 +23,48 @@ type XMLServices struct {
 	repo *repository.Repository
 }
 
-func streamToByte(stream io.Reader) []byte {
+func ParserParams(fileReader *os.File, tablename string, r *repository.Repository) []model.ParamNode {
 	logger := logging.GetLogger()
-	buf := new(bytes.Buffer)
-	_, err := buf.ReadFrom(stream)
-	if err != nil {
-		logger.Error(err)
-		return nil
-	}
-	return buf.Bytes()
-}
+	var result []model.ParamNode
 
-func StreamToString(stream *os.File) string {
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(stream)
-	return buf.String()
-}
-func ParserParams(fileReader *os.File, tablename string, r *repository.Repository) model.PARAMS {
-	logger := logging.GetLogger()
-	var result model.PARAMS
 	decoder := xml.NewDecoder(fileReader)
 	for {
+		tmpResult := model.ParamNode{}
 		token, err := decoder.Token()
 		if err != nil {
-			break
+			if err == errors.New("unexpected EOF") {
+				//TODO
+				if len(result) != 0 {
+					r.Inserter.ParamOne(tablename, result)
+					result = []model.ParamNode{}
+				}
+				break
+			} else {
+				log.Print(err)
+				break
+			}
 		}
 		if element, ok := token.(xml.StartElement); ok {
-			if element.Name.Local == "PARAMTYPE" {
-				err = decoder.DecodeElement(&result, &element)
+			if element.Name.Local == "PARAM" {
+				err = decoder.DecodeElement(&tmpResult, &element)
 				if err != nil {
 					logger.Error(err)
-					return model.PARAMS{}
+					return []model.ParamNode{}
 				}
-				r.Inserter.Params(tablename, result)
+				switch tmpResult.TYPEID {
+				case 5:
+				case 7:
+				case 10:
+				case 11:
+				case 12:
+				case 13:
+				case 19:
+					result = append(result, tmpResult)
+				}
+				if len(result) == 99 {
+					r.Inserter.ParamOne(tablename, result)
+					result = []model.ParamNode{}
+				}
 			}
 		}
 	}
