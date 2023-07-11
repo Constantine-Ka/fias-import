@@ -39,24 +39,41 @@ func StreamToString(stream *os.File) string {
 	buf.ReadFrom(stream)
 	return buf.String()
 }
-func ParserParams(fileReader *os.File) model.PARAMS {
+func ParserParams(fileReader *os.File, tablename string, r *repository.Repository) model.PARAMS {
 	logger := logging.GetLogger()
 	var result model.PARAMS
-	contentBytes, err := io.ReadAll(fileReader)
-	if err != nil {
-		logger.Error(err)
-	}
-	logger.Println("😃😃😃")
-	err = fileReader.Close()
-	if err != nil {
-		logger.Error(err)
-	}
-	err = xml.Unmarshal(contentBytes, &result)
-	if err != nil {
-		if err != io.EOF {
-			logger.Error(err)
+	decoder := xml.NewDecoder(fileReader)
+	for {
+		token, err := decoder.Token()
+		if err != nil {
+			break
+		}
+		if element, ok := token.(xml.StartElement); ok {
+			if element.Name.Local == "PARAMTYPE" {
+				err = decoder.DecodeElement(&result, &element)
+				if err != nil {
+					logger.Error(err)
+					return model.PARAMS{}
+				}
+				r.Inserter.Params(tablename, result)
+			}
 		}
 	}
+	//contentBytes, err := io.ReadAll(fileReader)
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//logger.Println("😃😃😃")
+	//err = fileReader.Close()
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//err = xml.Unmarshal(contentBytes, &result)
+	//if err != nil {
+	//	if err != io.EOF {
+	//		logger.Error(err)
+	//	}
+	//}
 	return result
 }
 func ParserAddrObj(fileReader *os.File) model_objectAddr.ADDRESSOBJECTS {
@@ -71,7 +88,7 @@ func ParserAddrObj(fileReader *os.File) model_objectAddr.ADDRESSOBJECTS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -93,7 +110,7 @@ func ParserAddrObjDivision(fileReader *os.File) model_objectAddr.ITEMS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -114,7 +131,7 @@ func ParserAdmHieRarchy(fileReader *os.File) model_hierarchy.ADMITEMS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -135,7 +152,7 @@ func ParserApartments(fileReader *os.File) model_apartments.APARTMENTS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -197,7 +214,7 @@ func parserMunHieRarchy(fileReader *os.File) model_hierarchy.MUNITEMS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -238,7 +255,7 @@ func ParserRooms(fileReader *os.File) model_rooms.ROOMS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -259,7 +276,7 @@ func ParserSteads(fileReader *os.File) model_steads.STEADS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -282,7 +299,7 @@ func ParserChangeH(fileReader *os.File) model_other.CHANGEHISTORY {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -304,7 +321,7 @@ func ParserNDocs(fileReader *os.File) model_other.NORMDOCS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -364,7 +381,7 @@ func ParserNdocsType(fileReader *os.File) model.NDOCTYPES {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -387,7 +404,7 @@ func ParserNdocsInd(fileReader *os.File) model.NDOCKINDS {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
@@ -399,6 +416,7 @@ func ParserNdocsInd(fileReader *os.File) model.NDOCKINDS {
 func ParserParamTypes(fileReader *os.File) model.PARAMTYPES {
 	logger := logging.GetLogger()
 	var result model.PARAMTYPES
+
 	//byteFile := StreamToString(fileReader)
 	contentBytes, err := io.ReadAll(fileReader)
 	if err != nil {
@@ -409,8 +427,8 @@ func ParserParamTypes(fileReader *os.File) model.PARAMTYPES {
 	if err != nil {
 		logger.Error(err)
 	}
-	logger.Infoln("Файл закрыт")
-	logger.Infoln("Файл закрыт")
+	log.Println("Файл закрыт")
+
 	err = xml.Unmarshal(contentBytes, &result)
 	if err != nil {
 		if err != io.EOF {
