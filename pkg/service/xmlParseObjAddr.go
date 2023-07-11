@@ -46,7 +46,6 @@ func ParserParams(fileReader *os.File, tablename string, r *repository.Repositor
 	for {
 		token, err := decoder.Token()
 		if err != nil {
-			logger.Error(err)
 			break
 		}
 		if element, ok := token.(xml.StartElement); ok {
