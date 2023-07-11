@@ -125,6 +125,42 @@ func ParserAddrObjDivision(fileReader *os.File) model_objectAddr.ITEMS {
 func ParserAdmHieRarchy(fileReader *os.File) model_hierarchy.ADMITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.ADMITEMS
+	//count := 0
+	//decoder := xml.NewDecoder(fileReader)
+	//for {
+	//	//var tmpResult model.ParamNode
+	//	token, err := decoder.Token()
+	//	if err != nil {
+	//		if err == io.EOF {
+	//			//TODO
+	//			if len(result.ITEM) != 0 {
+	//				r.Inserter.AdmHierarchy(tablename, result)
+	//				result = model_hierarchy.ADMITEMS{}
+	//			}
+	//			break
+	//		} else {
+	//			log.Print(err)
+	//			break
+	//		}
+	//	}
+	//	if element, ok := token.(xml.StartElement); ok {
+	//		if element.Name.Local == "PARAM" {
+	//			count++
+	//			tmpResult := utills.XmlElemToParam(element)
+	//			switch tmpResult.TYPEID {
+	//			case 5, 7, 10, 11, 12, 13, 19:
+	//				result.ITEM = append(result.ITEM, tmpResult)
+	//			}
+	//			if count == 100 {
+	//				r.Inserter.ParamOne(tablename, result)
+	//				result = []model.ParamNode{}
+	//				count = 0
+	//			}
+	//		}
+	//
+	//	}
+	//
+	//}
 	contentBytes, err := io.ReadAll(fileReader)
 	if err != nil {
 		logger.Error(err)
