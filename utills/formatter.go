@@ -3,6 +3,8 @@ package utills
 import (
 	"encoding/xml"
 	"fias-import_byLondon/model"
+	model_hierarchy "fias-import_byLondon/model/model-hierarchy"
+	model_other "fias-import_byLondon/model/model-other"
 	"log"
 	"strconv"
 )
@@ -60,6 +62,88 @@ func XmlElemToParam(attrS xml.StartElement) model.ParamNode {
 			tmpResult.STARTDATE = attr.Value
 		case "ENDDATE":
 			tmpResult.ENDDATE = attr.Value
+		}
+	}
+	return tmpResult
+}
+func XmlElemToAdmHieRarchy(attrS xml.StartElement) model_hierarchy.AdmNode {
+	var tmpResult model_hierarchy.AdmNode
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "ID":
+			tmpResult.ID = attr.Value
+		case "OBJECTID":
+			tmpResult.OBJECTID = attr.Value
+		case "PARENTOBJID":
+			tmpResult.PARENTOBJID = attr.Value
+		case "CHANGEID":
+			tmpResult.CHANGEID = attr.Value
+		case "REGIONCODE":
+			tmpResult.REGIONCODE = attr.Value
+		case "PREVID":
+			tmpResult.PREVID = attr.Value
+		case "NEXTID":
+			tmpResult.NEXTID = attr.Value
+		case "UPDATEDATE":
+			tmpResult.UPDATEDATE = attr.Value
+		case "STARTDATE":
+			tmpResult.STARTDATE = attr.Value
+		case "ENDDATE":
+			tmpResult.ENDDATE = attr.Value
+		case "ISACTIVE":
+			if attr.Value == "1" {
+				tmpResult.ISACTIVE = true
+			} else {
+				tmpResult.ISACTIVE = false
+			}
+		case "PATH":
+			tmpResult.PATH = attr.Value
+		}
+	}
+	return tmpResult
+}
+func XmlElemToHistory(attrS xml.StartElement) model_other.HistoryNode {
+	var tmpResult model_other.HistoryNode
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "Text":
+			tmpResult.Text = attr.Value
+		case "CHANGEID":
+			tmpResult.CHANGEID = attr.Value
+		case "OBJECTID":
+			tmpResult.OBJECTID = attr.Value
+		case "ADROBJECTID":
+			tmpResult.ADROBJECTID = attr.Value
+		case "OPERTYPEID":
+			tmpResult.OPERTYPEID = attr.Value
+		case "CHANGEDATE":
+			tmpResult.CHANGEDATE = attr.Value
+		case "NDOCID":
+			tmpResult.NDOCID, _ = strconv.ParseInt(attr.Value, 10, 64)
+		}
+	}
+	return tmpResult
+}
+func XmlElemToReestr(attrS xml.StartElement) model_other.ReestrNode {
+	var tmpResult model_other.ReestrNode
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "Text":
+			tmpResult.Text = attr.Value
+		case "OBJECTID":
+			tmpResult.Text = attr.Value
+		case "OBJECTGUID":
+			tmpResult.Text = attr.Value
+		case "CHANGEID":
+			tmpResult.Text = attr.Value
+		case "ISACTIVE":
+			tmpResult.Text = attr.Value
+		case "LEVELID":
+			tmpResult.Text = attr.Value
+		case "CREATEDATE":
+			tmpResult.Text = attr.Value
+		case "UPDATEDATE":
+			tmpResult.Text = attr.Value
 		}
 	}
 	return tmpResult
