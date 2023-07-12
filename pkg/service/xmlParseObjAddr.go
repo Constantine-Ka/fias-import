@@ -122,25 +122,58 @@ func ParserAddrObjDivision(fileReader *os.File) model_objectAddr.ITEMS {
 	}
 	return result
 }
-func ParserAdmHieRarchy(fileReader *os.File) model_hierarchy.ADMITEMS {
+func ParserAdmHieRarchy(fileReader *os.File, tablename string, r *repository.Repository) model_hierarchy.ADMITEMS {
 	logger := logging.GetLogger()
 	var result model_hierarchy.ADMITEMS
-	contentBytes, err := io.ReadAll(fileReader)
-	if err != nil {
-		logger.Error(err)
+	count := 0
+	decoder := xml.NewDecoder(fileReader)
+	for {
+		var tmpResult model_hierarchy.AdmNode
+		token, err := decoder.Token()
+		if err != nil {
+			if err == io.EOF {
+				//TODO
+				if len(result.ITEM) != 0 {
+					r.Inserter.AdmHierarchy(tablename, result)
+					result = model_hierarchy.ADMITEMS{}
+				}
+				break
+			} else {
+				log.Print(err)
+				break
+			}
+		}
+		if element, ok := token.(xml.StartElement); ok {
+			if element.Name.Local == "PARAM" {
+				count++
+				tmpResult = utills.XmlElemToAdmHieRarchy(element)
+				result.ITEM = append(result.ITEM, tmpResult)
+				if count == 100 {
+					r.Inserter.AdmHierarchy(tablename, result)
+					result.ITEM = []model_hierarchy.AdmNode{}
+					count = 0
+				}
+			}
+
+		}
+
 	}
-	logger.Println("😃😃😃")
-	err = fileReader.Close()
+	//contentBytes, err := io.ReadAll(fileReader)
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//logger.Println("😃😃😃")
+	err := fileReader.Close()
 	if err != nil {
 		logger.Error(err)
 	}
 	log.Println("Файл закрыт")
-	err = xml.Unmarshal(contentBytes, &result)
-	if err != nil {
-		if err != io.EOF {
-			logger.Error(err)
-		}
-	}
+	//err = xml.Unmarshal(contentBytes, &result)
+	//if err != nil {
+	//	if err != io.EOF {
+	//		logger.Error(err)
+	//	}
+	//}
 	return result
 }
 func ParserApartments(fileReader *os.File) model_apartments.APARTMENTS {
@@ -226,24 +259,57 @@ func parserMunHieRarchy(fileReader *os.File) model_hierarchy.MUNITEMS {
 	}
 	return result
 }
-func ParserReestrObj(fileReader *os.File) model_other.REESTROBJECTS {
-	logger := logging.GetLogger()
+func ParserReestrObj(fileReader *os.File, tableName string, r *repository.Repository) model_other.REESTROBJECTS {
+	//logger := logging.GetLogger()
 	var result model_other.REESTROBJECTS
-	contentBytes, err := io.ReadAll(fileReader)
-	if err != nil {
-		logger.Error(err)
-	}
-	logger.Println("😃😃😃")
-	err = fileReader.Close()
-	if err != nil {
-		logger.Error(err)
-	}
-	err = xml.Unmarshal(contentBytes, &result)
-	if err != nil {
-		if err != io.EOF {
-			logger.Error(err)
+	count := 0
+	decoder := xml.NewDecoder(fileReader)
+	for {
+		var tmpResult model_other.ReestrNode
+		token, err := decoder.Token()
+		if err != nil {
+			if err == io.EOF {
+				//TODO
+				if len(result.OBJECT) != 0 {
+					r.Inserter.ReestrObject(tableName, result)
+					result = model_other.REESTROBJECTS{}
+				}
+				break
+			} else {
+				log.Print(err)
+				break
+			}
 		}
+		if element, ok := token.(xml.StartElement); ok {
+			if element.Name.Local == "PARAM" {
+				count++
+				tmpResult = utills.XmlElemToReestr(element)
+				result.OBJECT = append(result.OBJECT, tmpResult)
+				if count == 100 {
+					r.Inserter.ReestrObject(tableName, result)
+					result.OBJECT = []model_other.ReestrNode{}
+					count = 0
+				}
+			}
+
+		}
+
 	}
+	//contentBytes, err := io.ReadAll(fileReader)
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//logger.Println("😃😃😃")
+	//err = fileReader.Close()
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//err = xml.Unmarshal(contentBytes, &result)
+	//if err != nil {
+	//	if err != io.EOF {
+	//		logger.Error(err)
+	//	}
+	//}
 	return result
 }
 func ParserRooms(fileReader *os.File) model_rooms.ROOMS {
@@ -288,27 +354,60 @@ func ParserSteads(fileReader *os.File) model_steads.STEADS {
 	}
 	return result
 }
-func ParserChangeH(fileReader *os.File) model_other.CHANGEHISTORY {
+func ParserChangeH(fileReader *os.File, tablename string, r *repository.Repository) model_other.CHANGEHISTORY {
 	logger := logging.GetLogger()
 	logger.Info("😊😊")
 	var result model_other.CHANGEHISTORY
+	count := 0
 	//byteFile := StreamToString(fileReader)
-	contentBytes, err := io.ReadAll(fileReader)
-	if err != nil {
-		logger.Error(err)
-	}
-	logger.Println("😃😃😃")
-	err = fileReader.Close()
-	if err != nil {
-		logger.Error(err)
-	}
-	log.Println("Файл закрыт")
-	err = xml.Unmarshal(contentBytes, &result)
-	if err != nil {
-		if err != io.EOF {
-			logger.Error(err)
+	decoder := xml.NewDecoder(fileReader)
+	for {
+		var tmpResult model_other.HistoryNode
+		token, err := decoder.Token()
+		if err != nil {
+			if err == io.EOF {
+				//TODO
+				if len(result.ITEM) != 0 {
+					r.Inserter.ChangeHistory(tablename, result)
+					result = model_other.CHANGEHISTORY{}
+				}
+				break
+			} else {
+				log.Print(err)
+				break
+			}
 		}
+		if element, ok := token.(xml.StartElement); ok {
+			if element.Name.Local == "PARAM" {
+				count++
+				tmpResult = utills.XmlElemToHistory(element)
+				result.ITEM = append(result.ITEM, tmpResult)
+				if count == 100 {
+					r.Inserter.ChangeHistory(tablename, result)
+					result = model_other.CHANGEHISTORY{}
+					count = 0
+				}
+			}
+
+		}
+
 	}
+	//contentBytes, err := io.ReadAll(fileReader)
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//logger.Println("😃😃😃")
+	//err = fileReader.Close()
+	//if err != nil {
+	//	logger.Error(err)
+	//}
+	//log.Println("Файл закрыт")
+	//err = xml.Unmarshal(contentBytes, &result)
+	//if err != nil {
+	//	if err != io.EOF {
+	//		logger.Error(err)
+	//	}
+	//}
 	return result
 }
 func ParserNDocs(fileReader *os.File) model_other.NORMDOCS {
