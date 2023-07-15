@@ -14,8 +14,6 @@ import (
 	"fias-import_byLondon/utills"
 	"fias-import_byLondon/utills/config"
 	"fias-import_byLondon/utills/logging"
-	"github.com/pkg/sftp"
-	"golang.org/x/crypto/ssh"
 	"log"
 	"os"
 	"regexp"
@@ -26,7 +24,7 @@ type FileServices struct {
 	repo *repository.Repository
 }
 
-func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC *ssh.Client) []string {
+func (s *FileServices) Unpacking(path, filetype string) []string {
 	logger := logging.GetLogger()
 	cfg := config.GetConf()
 	//log.Println("Начало распаковки")
@@ -38,7 +36,7 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 	//defer zipFile.Close()
 	//log.Println(ListTable)
 
-	filesInfo := getListFile(sftpC, path)
+	filesInfo := getListFile(path)
 	var result []string
 	for _, f := range filesInfo {
 		//if i == 6 {
@@ -63,8 +61,15 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 				if len(ListTable) == 0 || utills.IndexOf(ListTable, cfg.Tablename.Content.AddrObject) == -1 {
 					s.repo.CreateTable.AddrObject(cfg.Tablename.Content.AddrObject, model_objectAddr.ADDRESSOBJECTS{})
 				}
-				s.repo.Inserter.AddrObject(cfg.Tablename.Content.AddrObject, ParserAddrObj(fileReader))
-				os.Rename(f, f+".bak")
+				data := ParserAddrObj(fileReader)
+				log.Println(len(data.OBJECT))
+				s.repo.Inserter.AddrObject(cfg.Tablename.Content.AddrObject, data)
+				for _, d := range data.OBJECT {
+					if d.LEVEL == 1 {
+						log.Println(d.NAME)
+					}
+				}
+				//os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_ADDR_OBJ_DIVISION_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobjdiv") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -203,7 +208,7 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 					s.repo.CreateTable.Params(cfg.Tablename.Content.HousesP, model.PARAMS{})
 				}
 				ParserParams(fileReader, cfg.Tablename.Content.HousesP, s.repo)
-
+				os.Rename(f, f+".bak")
 				//s.repo.Inserter.Params(, ParserParams(fileReader))
 			} else if regexp.MustCompile(`AS_MUN_HIERARCHY_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "hierarchymun") {
 				log.Println("Обрабатывается файл:", f)
@@ -443,7 +448,7 @@ func (s *FileServices) Unpacking(path, filetype string, sftpC *sftp.Client, sshC
 	return result
 }
 
-func getListFile(sftpClient *sftp.Client, dir string) []string {
+func getListFile(dir string) []string {
 	logger := logging.GetLogger()
 	log.Println(dir)
 	//log.Println(stat.IsDir())

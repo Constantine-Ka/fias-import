@@ -1,13 +1,13 @@
 basic:
-  filepath: "/mnt/disk/files/gar_xml"
-  prefix: "all"
+  filepath: "./dst"
+  prefix: "addrobj"
 db:
   driver: "mysql"
-  username: "genesis"
-  password: "N2s3I8g7"
-  host: "192.168.0.99"
-  port: "3306"
-  dbname: "fias"
+  username: "konstantine"
+  password: "23981487"
+  host: "localhost"
+  port: "6033"
+  dbname: "fias2"
   sslmode: "disable"
 
 SFTP:

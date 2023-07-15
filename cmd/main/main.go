@@ -2,7 +2,6 @@ package main
 
 import (
 	"fias-import_byLondon/model"
-	"fias-import_byLondon/pkg/handler"
 	"fias-import_byLondon/pkg/repository"
 	"fias-import_byLondon/pkg/service"
 	"fias-import_byLondon/utills/logging"
@@ -27,9 +26,9 @@ func main() {
 		logrus.Error(fmt.Errorf("fatal error config file: %w",
 			err))
 	}
-	sftpClient, sshClient := handler.CreateConnection(*vp)
-	sftpClient.Close()
-	sshClient.Close()
+	//sftpClient, sshClient := handler.CreateConnection(*vp)
+	//defer sftpClient.Close()
+	//defer sshClient.Close()
 	//sftpClient.Wait()
 	//config.GetConf()
 
@@ -85,7 +84,7 @@ func main() {
 	//services.InstallServices.NewTables()
 	//_ = services.Unpacking(*file, *prefix, sftpClient, sshClient)
 
-	_ = services.Unpacking(*file, *prefix, sftpClient, sshClient)
+	_ = services.Unpacking(*file, *prefix)
 	//sftpClient.Close()
 	//sshClient.Close()
 	//for _, name := range names {
