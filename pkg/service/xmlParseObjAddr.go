@@ -281,9 +281,10 @@ func ParserReestrObj(fileReader *os.File, tableName string, r *repository.Reposi
 			}
 		}
 		if element, ok := token.(xml.StartElement); ok {
-			if element.Name.Local == "PARAM" {
+			if element.Name.Local == "OBJECT" {
 				count++
 				tmpResult = utills.XmlElemToReestr(element)
+
 				result.OBJECT = append(result.OBJECT, tmpResult)
 				if count == 100 {
 					r.Inserter.ReestrObject(tableName, result)
