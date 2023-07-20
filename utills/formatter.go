@@ -133,19 +133,19 @@ func XmlElemToReestr(attrS xml.StartElement) model_other.ReestrNode {
 		case "Text":
 			tmpResult.Text = attr.Value
 		case "OBJECTID":
-			tmpResult.Text = attr.Value
+			tmpResult.OBJECTID = attr.Value
 		case "OBJECTGUID":
-			tmpResult.Text = attr.Value
+			tmpResult.OBJECTGUID = attr.Value
 		case "CHANGEID":
-			tmpResult.Text = attr.Value
+			tmpResult.CHANGEID = attr.Value
 		case "ISACTIVE":
-			tmpResult.Text = attr.Value
+			tmpResult.ISACTIVE = attr.Value == "1"
 		case "LEVELID":
-			tmpResult.Text = attr.Value
+			tmpResult.LEVELID = attr.Value
 		case "CREATEDATE":
-			tmpResult.Text = attr.Value
+			tmpResult.CREATEDATE = attr.Value
 		case "UPDATEDATE":
-			tmpResult.Text = attr.Value
+			tmpResult.UPDATEDATE = attr.Value
 		}
 	}
 	return tmpResult
