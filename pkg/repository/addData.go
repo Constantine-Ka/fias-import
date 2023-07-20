@@ -26,6 +26,14 @@ func (i2 InsertData) ParamOne(tableName string, i []model.ParamNode) bool {
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `change_id`, `change_id_end`, `type_id`, `value`, `update_date`, `start_date`, `end_date`) VALUES ", tableName)
 	var query string
 	for _, s := range i {
+		//now := time.Now()
+		//enddate, err := t	ime.Parse(s.ENDDATE, "2022-10-06")
+		//if err != nil {
+		//	logger.Error(err)
+		//
+		//	return false
+		//}
+		//if now.Compare(enddate) > 0 {
 		strings.ReplaceAll(strings.ReplaceAll(s.VALUE, "ж\\", ":"), "\\", "")
 
 		query = fmt.Sprintf(" ('%d','%s','%s','%s','%d','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.CHANGEID, s.CHANGEIDEND, s.TYPEID, s.VALUE, s.UPDATEDATE, s.STARTDATE, s.ENDDATE)
@@ -37,6 +45,8 @@ func (i2 InsertData) ParamOne(tableName string, i []model.ParamNode) bool {
 			logger.Error(err)
 			return false
 		}
+		//}
+
 		query = ""
 	}
 
@@ -220,6 +230,7 @@ func (i2 InsertData) Params(tableName string, i model.PARAMS) bool {
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `change_id`, `change_id_end`, `type_id`, `value`, `update_date`, `start_date`, `end_date`) VALUES ", tableName)
 	var query string
 	for _, s := range i.PARAM {
+
 		strings.ReplaceAll(strings.ReplaceAll(s.VALUE, "ж\\", ":"), "\\", "")
 
 		query = fmt.Sprintf(" ('%d','%s','%s','%s','%d','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.CHANGEID, s.CHANGEIDEND, s.TYPEID, s.VALUE, s.UPDATEDATE, s.STARTDATE, s.ENDDATE)

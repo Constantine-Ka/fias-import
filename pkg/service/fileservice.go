@@ -61,15 +61,13 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				if len(ListTable) == 0 || utills.IndexOf(ListTable, cfg.Tablename.Content.AddrObject) == -1 {
 					s.repo.CreateTable.AddrObject(cfg.Tablename.Content.AddrObject, model_objectAddr.ADDRESSOBJECTS{})
 				}
-				data := ParserAddrObj(fileReader)
-				log.Println(len(data.OBJECT))
-				s.repo.Inserter.AddrObject(cfg.Tablename.Content.AddrObject, data)
+				data := ParserAddrObj(fileReader, cfg.Tablename.Content.AddrObject, s.repo)
 				for _, d := range data.OBJECT {
 					if d.LEVEL == 1 {
 						log.Println(d.NAME)
 					}
 				}
-				//os.Rename(f, f+".bak")
+				os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_ADDR_OBJ_DIVISION_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobjdiv") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -110,7 +108,7 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 					s.repo.CreateTable.AdmHierarchy(cfg.Tablename.Content.AdmHierarchy, model_hierarchy.ADMITEMS{})
 				}
 				ParserAdmHieRarchy(fileReader, cfg.Tablename.Content.AdmHierarchy, s.repo)
-
+				os.Rename(f, f+".bak")
 				//s.repo.Inserter.AdmHierarchy(cfg.Tablename.Content.AdmHierarchy, ParserAdmHieRarchy(fileReader))
 			} else if regexp.MustCompile(`AS_APARTMENTS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "appartments") {
 				log.Println("Обрабатывается файл:", f)
@@ -194,7 +192,8 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				if utills.IndexOf(ListTable, cfg.Tablename.Content.Houses) == -1 {
 					s.repo.CreateTable.Houses(cfg.Tablename.Content.Houses, model_houses.HOUSES{})
 				}
-				s.repo.Inserter.Houses(cfg.Tablename.Content.Houses, ParserHouses(fileReader))
+				ParserHouses(fileReader, cfg.Tablename.Content.Houses, s.repo)
+				//s.repo.Inserter.Houses(cfg.Tablename.Content.Houses, ParserHouses(fileReader))
 				os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_HOUSES_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "housesp") {
 				log.Println("Обрабатывается файл:", f)

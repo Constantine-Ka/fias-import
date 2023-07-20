@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"fias-import_byLondon/model"
 	model_hierarchy "fias-import_byLondon/model/model-hierarchy"
+	model_houses "fias-import_byLondon/model/model-houses"
+	model_objectAddr "fias-import_byLondon/model/model-objectAddr"
 	model_other "fias-import_byLondon/model/model-other"
 	"log"
 	"strconv"
@@ -144,6 +146,114 @@ func XmlElemToReestr(attrS xml.StartElement) model_other.ReestrNode {
 			tmpResult.Text = attr.Value
 		case "UPDATEDATE":
 			tmpResult.Text = attr.Value
+		}
+	}
+	return tmpResult
+}
+func XmlElemToObject(attrS xml.StartElement) model_objectAddr.AddrO {
+	var tmpResult model_objectAddr.AddrO
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "ID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.ID = num
+		case "OBJECTID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.OBJECTID = num
+		case "OBJECTGUID":
+			tmpResult.OBJECTGUID = attr.Value
+		case "CHANGEID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.CHANGEID = num
+		case "NAME":
+			tmpResult.NAME = attr.Value
+		case "TYPENAME":
+			tmpResult.TYPENAME = attr.Value
+		case "LEVEL":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.LEVEL = num
+		case "OPERTYPEID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.OPERTYPEID = num
+		case "PREVID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.PREVID = num
+		case "NEXTID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_objectAddr.AddrO{}
+			}
+			tmpResult.NEXTID = num
+		case "UPDATEDATE":
+			tmpResult.UPDATEDATE = attr.Value
+		case "STARTDATE":
+			tmpResult.STARTDATE = attr.Value
+		case "ENDDATE":
+			tmpResult.ENDDATE = attr.Value
+		case "ISACTUAL":
+			tmpResult.ISACTUAL = attr.Value == "1"
+		case "ISACTIVE":
+			tmpResult.ISACTIVE = attr.Value == "1"
+		}
+	}
+	return tmpResult
+}
+func XmlElemToHouses(attrS xml.StartElement) model_houses.HousesItem {
+	var tmpResult model_houses.HousesItem
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "NEXTID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_houses.HousesItem{}
+			}
+			tmpResult.NEXTID = num
+		case "PREVID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_houses.HousesItem{}
+			}
+			tmpResult.PREVID = num
+		case "ID":
+			tmpResult.ID = attr.Value
+		case "OBJECTID":
+
+			tmpResult.OBJECTID = attr.Value
+		case "OBJECTGUID":
+
+			tmpResult.OBJECTGUID = attr.Value
+		case "CHANGEID":
+
+			tmpResult.CHANGEID = attr.Value
+
+		case "UPDATEDATE":
+			tmpResult.UPDATEDATE = attr.Value
+		case "STARTDATE":
+			tmpResult.STARTDATE = attr.Value
+		case "ENDDATE":
+			tmpResult.ENDDATE = attr.Value
+		case "ISACTUAL":
+			tmpResult.ISACTUAL = attr.Value == "1"
+		case "ISACTIVE":
+			tmpResult.ISACTIVE = attr.Value == "1"
 		}
 	}
 	return tmpResult
