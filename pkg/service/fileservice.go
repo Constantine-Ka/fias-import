@@ -49,7 +49,6 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 		//	logger.Fatal(err)
 		//}
 		if !strings.HasSuffix(f, ".bak") {
-
 			if regexp.MustCompile(`AS_ADDR_OBJ_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobj") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -67,7 +66,7 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 						log.Println(d.NAME)
 					}
 				}
-				os.Rename(f, f+".bak")
+				_ = os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_ADDR_OBJ_DIVISION_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobjdiv") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -80,7 +79,7 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 					s.repo.CreateTable.ObjectDivision(cfg.Tablename.Content.ObjectDivision, model_objectAddr.ITEMS{})
 				}
 				s.repo.Inserter.ObjectDivision(cfg.Tablename.Content.ObjectDivision, ParserAddrObjDivision(fileReader))
-				os.Rename(f, f+".bak")
+				_ = os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_ADDR_OBJ_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "addrobjp") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -94,7 +93,7 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				}
 				ParserParams(fileReader, cfg.Tablename.Content.AddrObjectP, s.repo)
 
-				os.Rename(f, f+".bak")
+				_ = os.Rename(f, f+".bak")
 				//s.repo.Inserter.Params(cfg.Tablename.Content.AddrObjectP, ParserParams(fileReader))
 			} else if regexp.MustCompile(`AS_ADM_HIERARCHY_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "hierarchyadm") {
 				log.Println("Обрабатывается файл:", f)
@@ -108,7 +107,10 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 					s.repo.CreateTable.AdmHierarchy(cfg.Tablename.Content.AdmHierarchy, model_hierarchy.ADMITEMS{})
 				}
 				ParserAdmHieRarchy(fileReader, cfg.Tablename.Content.AdmHierarchy, s.repo)
-				os.Rename(f, f+".bak")
+				err = os.Rename(f, f+".bak")
+				if err != nil {
+					log.Print(err)
+				}
 				//s.repo.Inserter.AdmHierarchy(cfg.Tablename.Content.AdmHierarchy, ParserAdmHieRarchy(fileReader))
 			} else if regexp.MustCompile(`AS_APARTMENTS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "appartments") {
 				log.Println("Обрабатывается файл:", f)
@@ -121,8 +123,9 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				if utills.IndexOf(ListTable, cfg.Tablename.Content.Apartments) == -1 {
 					s.repo.CreateTable.Apartments(cfg.Tablename.Content.Apartments, model_apartments.APARTMENTS{})
 				}
-				s.repo.Inserter.Apartments(cfg.Tablename.Content.Apartments, ParserApartments(fileReader))
-				os.Rename(f, f+".bak")
+				ParserApartments(fileReader, cfg.Tablename.Content.Apartments, s.repo)
+				//s.repo.Inserter.Apartments(cfg.Tablename.Content.Apartments, ParserApartments(fileReader))
+				_ = os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_APARTMENTS_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "appartmentsp") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -136,7 +139,7 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				}
 				ParserParams(fileReader, cfg.Tablename.Content.ApartmentsP, s.repo)
 
-				os.Rename(f, f+".bak")
+				_ = os.Rename(f, f+".bak")
 				//s.repo.Inserter.Params(cfg.Tablename.Content.ApartmentsP, ParserParams(fileReader))
 			} else if regexp.MustCompile(`AS_CARPLACES_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "carplaces") {
 				log.Println("Обрабатывается файл:", f)
@@ -194,7 +197,7 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				}
 				ParserHouses(fileReader, cfg.Tablename.Content.Houses, s.repo)
 				//s.repo.Inserter.Houses(cfg.Tablename.Content.Houses, ParserHouses(fileReader))
-				os.Rename(f, f+".bak")
+				_ = os.Rename(f, f+".bak")
 			} else if regexp.MustCompile(`AS_HOUSES_PARAMS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "housesp") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)
@@ -220,8 +223,12 @@ func (s *FileServices) Unpacking(path, filetype string) []string {
 				if utills.IndexOf(ListTable, cfg.Tablename.Content.MunHierarchy) == -1 {
 					s.repo.CreateTable.MunHierarchy(cfg.Tablename.Content.MunHierarchy, model_hierarchy.MUNITEMS{})
 				}
-				s.repo.Inserter.MunHierarchy(cfg.Tablename.Content.MunHierarchy, parserMunHieRarchy(fileReader))
-				os.Rename(f, f+".bak")
+				parserMunHieRarchy(fileReader, cfg.Tablename.Content.MunHierarchy, s.repo)
+				//s.repo.Inserter.MunHierarchy(cfg.Tablename.Content.MunHierarchy, parserMunHieRarchy(fileReader))
+				err = os.Rename(f, f+".bak")
+				if err != nil {
+					log.Print(err)
+				}
 			} else if regexp.MustCompile(`AS_NORMATIVE_DOCS_\d{8}`).Match([]byte(f)) && (filetype == "all" || filetype == "normativedocs") {
 				log.Println("Обрабатывается файл:", f)
 				//fileReader, err := sftpC.Open(f)

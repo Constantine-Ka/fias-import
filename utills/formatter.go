@@ -3,6 +3,7 @@ package utills
 import (
 	"encoding/xml"
 	"fias-import_byLondon/model"
+	model_apartments "fias-import_byLondon/model/model-apartments"
 	model_hierarchy "fias-import_byLondon/model/model-hierarchy"
 	model_houses "fias-import_byLondon/model/model-houses"
 	model_objectAddr "fias-import_byLondon/model/model-objectAddr"
@@ -82,6 +83,42 @@ func XmlElemToAdmHieRarchy(attrS xml.StartElement) model_hierarchy.AdmNode {
 			tmpResult.CHANGEID = attr.Value
 		case "REGIONCODE":
 			tmpResult.REGIONCODE = attr.Value
+		case "PREVID":
+			tmpResult.PREVID = attr.Value
+		case "NEXTID":
+			tmpResult.NEXTID = attr.Value
+		case "UPDATEDATE":
+			tmpResult.UPDATEDATE = attr.Value
+		case "STARTDATE":
+			tmpResult.STARTDATE = attr.Value
+		case "ENDDATE":
+			tmpResult.ENDDATE = attr.Value
+		case "ISACTIVE":
+			if attr.Value == "1" {
+				tmpResult.ISACTIVE = true
+			} else {
+				tmpResult.ISACTIVE = false
+			}
+		case "PATH":
+			tmpResult.PATH = attr.Value
+		}
+	}
+	return tmpResult
+}
+func XmlElemToMunHieRarchy(attrS xml.StartElement) model_hierarchy.MunNode {
+	var tmpResult model_hierarchy.MunNode
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "ID":
+			tmpResult.ID = attr.Value
+		case "OBJECTID":
+			tmpResult.OBJECTID = attr.Value
+		case "PARENTOBJID":
+			tmpResult.PARENTOBJID = attr.Value
+		case "CHANGEID":
+			tmpResult.CHANGEID = attr.Value
+		case "OKTMO":
+			tmpResult.OKTMO = attr.Value
 		case "PREVID":
 			tmpResult.PREVID = attr.Value
 		case "NEXTID":
@@ -244,6 +281,50 @@ func XmlElemToHouses(attrS xml.StartElement) model_houses.HousesItem {
 			num, err := strconv.ParseInt(attr.Value, 10, 64)
 			if err != nil {
 				return model_houses.HousesItem{}
+			}
+			tmpResult.NEXTID = num
+		case "UPDATEDATE":
+			tmpResult.UPDATEDATE = attr.Value
+		case "STARTDATE":
+			tmpResult.STARTDATE = attr.Value
+		case "ENDDATE":
+			tmpResult.ENDDATE = attr.Value
+		case "ISACTUAL":
+			tmpResult.ISACTUAL = attr.Value == "1"
+		case "ISACTIVE":
+			tmpResult.ISACTIVE = attr.Value == "1"
+		}
+	}
+	return tmpResult
+}
+func XmlElemToAppartments(attrS xml.StartElement) model_apartments.ITEM {
+	var tmpResult model_apartments.ITEM
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "ID":
+			tmpResult.ID = attr.Value
+		case "OBJECTID":
+			tmpResult.OBJECTID = attr.Value
+		case "OBJECTGUID":
+			tmpResult.OBJECTGUID = attr.Value
+		case "CHANGEID":
+			tmpResult.CHANGEID = attr.Value
+		case "NUMBER":
+			tmpResult.NUMBER = attr.Value
+		case "APARTTYPE":
+			tmpResult.APARTTYPE = attr.Value
+		case "OPERTYPEID":
+			tmpResult.OPERTYPEID = attr.Value
+		case "PREVID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_apartments.ITEM{}
+			}
+			tmpResult.PREVID = num
+		case "NEXTID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_apartments.ITEM{}
 			}
 			tmpResult.NEXTID = num
 		case "UPDATEDATE":

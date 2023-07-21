@@ -62,8 +62,8 @@ func main() {
 	//-------------------------------------
 	//Инициализация Баз данных
 	db, err := repository.NewDB(vp)
-	db.SetConnMaxLifetime(0)
-	db.SetMaxOpenConns(0)
+	db.SetConnMaxLifetime(30)
+	db.SetMaxOpenConns(5)
 	if err != nil {
 		logger.Fatalf("failed to initialize db:%s",
 			err.Error())
