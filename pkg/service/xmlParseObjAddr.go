@@ -280,7 +280,7 @@ func ParserHouses(fileReader *os.File, tablename string, r *repository.Repositor
 			}
 		}
 		if element, ok := token.(xml.StartElement); ok {
-			if element.Name.Local == "PARAM" {
+			if element.Name.Local == "HOUSE" {
 				count++
 				tmpResult := utills.XmlElemToHouses(element)
 				if tmpResult.NEXTID == 0 {

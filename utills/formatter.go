@@ -220,30 +220,32 @@ func XmlElemToHouses(attrS xml.StartElement) model_houses.HousesItem {
 	var tmpResult model_houses.HousesItem
 	for _, attr := range attrS.Attr {
 		switch attr.Name.Local {
-		case "NEXTID":
-			num, err := strconv.ParseInt(attr.Value, 10, 64)
-			if err != nil {
-				return model_houses.HousesItem{}
-			}
-			tmpResult.NEXTID = num
+		case "ID":
+			tmpResult.ID = attr.Value
+		case "OBJECTID":
+			tmpResult.OBJECTID = attr.Value
+		case "OBJECTGUID":
+			tmpResult.OBJECTGUID = attr.Value
+		case "CHANGEID":
+			tmpResult.CHANGEID = attr.Value
+		case "HOUSENUM":
+			tmpResult.HOUSENUM = attr.Value
+		case "HOUSETYPE":
+			tmpResult.HOUSETYPE = attr.Value
+		case "OPERTYPEID":
+			tmpResult.OPERTYPEID = attr.Value
 		case "PREVID":
 			num, err := strconv.ParseInt(attr.Value, 10, 64)
 			if err != nil {
 				return model_houses.HousesItem{}
 			}
 			tmpResult.PREVID = num
-		case "ID":
-			tmpResult.ID = attr.Value
-		case "OBJECTID":
-
-			tmpResult.OBJECTID = attr.Value
-		case "OBJECTGUID":
-
-			tmpResult.OBJECTGUID = attr.Value
-		case "CHANGEID":
-
-			tmpResult.CHANGEID = attr.Value
-
+		case "NEXTID":
+			num, err := strconv.ParseInt(attr.Value, 10, 64)
+			if err != nil {
+				return model_houses.HousesItem{}
+			}
+			tmpResult.NEXTID = num
 		case "UPDATEDATE":
 			tmpResult.UPDATEDATE = attr.Value
 		case "STARTDATE":

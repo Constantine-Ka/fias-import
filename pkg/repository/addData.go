@@ -334,7 +334,7 @@ func (i2 InsertData) Houses(tableName string, i model_houses.HOUSES) bool {
 	var query string
 	for _, s := range i.HOUSE {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OPERTYPEID, s.OBJECTGUID, s.CHANGEID, s.HOUSENUM, s.HOUSETYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.HOUSENUM, s.HOUSETYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		query = queryPre + query
 		_, err := i2.db.Exec(query)
 		if err != nil {
