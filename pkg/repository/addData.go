@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"strings"
+	"sync"
 )
 
 type InsertData struct {
@@ -134,7 +135,7 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 	if len(i.ADDRESSOBJECTTYPES.ADDRESSOBJECTTYPE) >= 1 {
 		for _, s := range i.ADDRESSOBJECTTYPES.ADDRESSOBJECTTYPE {
 
-			query = fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, "1970-01-01", s.Text)
+			query = fmt.Sprintf(" ('%d',IF(%t,'1','0'),'%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.ISACTIVE, s.ENDDATE, s.STARTDATE, s.UPDATEDATE, s.DESC, s.SHORTNAME, s.NAME, s.LEVEL, s.Text)
 			query = queryPre + query
 			_, err := i2.db.Exec(query)
 			if err != nil {
@@ -267,6 +268,34 @@ func (i2 InsertData) AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) 
 
 	return true
 }
+func (i2 InsertData) AdmHierarchyTwo(tableName string, i model_hierarchy.ADMITEMSTwo) bool {
+	logger := logging.GetLogger()
+	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`PrimaryKey`, `ID`, `OBJECTID`, `PARENTOBJID`, `CHANGEID`, `REGIONCODE`, `AREACODE`, `CITYCODE`, `PLACECODE`, `PLANCODE`, `STREETCODE`, `PREVID`, `NEXTID`, `UPDATEDATE`, `STARTDATE`, `ENDDATE`, `ISACTIVE`, `PATH`, `FK_ITEMS`) VALUES ", "hierarchy_adm_2")
+	var query string
+	wg := sync.WaitGroup{}
+	for _, s := range i.ITEM {
+		go func() {
+			wg.Add(1)
+			dbCel := i2.db
+			db := *dbCel
+			query = fmt.Sprintf(" ('0','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','1')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.AREACODE, s.CITYCODE, s.PLACECODE, s.PLACECODE, s.STREETCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH)
+
+			query = queryPre + query
+			_, err := db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+
+			}
+			query = ""
+			wg.Done()
+		}()
+
+	}
+	wg.Wait()
+
+	return true
+}
 
 func (i2 InsertData) MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool {
 	logger := logging.GetLogger()
@@ -353,8 +382,25 @@ func (i2 InsertData) AddrObject(tableName string, i model_objectAddr.ADDRESSOBJE
 	//queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
 	var query string
 	for _, s := range i.OBJECT {
-		query = fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", tableName, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		query = fmt.Sprintf("INSERT INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", tableName, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
 		_, err := i2.db.Exec(query)
+		if err != nil {
+			logger.Info(query)
+			logger.Error(err)
+			return false
+		}
+		query = ""
+
+	}
+	return true
+}
+func AddAddrObject(DB *sqlx.DB, tableName string, i model_objectAddr.ADDRESSOBJECTS) bool {
+	logger := logging.GetLogger()
+	//queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
+	var query string
+	for _, s := range i.OBJECT {
+		query = fmt.Sprintf("INSERT INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", tableName, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		_, err := DB.Exec(query)
 		if err != nil {
 			logger.Info(query)
 			logger.Error(err)

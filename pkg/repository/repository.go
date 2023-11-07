@@ -27,6 +27,7 @@ type dict interface {
 type content interface {
 	Params(tableName string, i model.PARAMS) bool
 	AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool
+	AdmHierarchyTwo(tableName string, i model_hierarchy.ADMITEMSTwo) bool
 	MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool
 	Apartments(tableName string, i model_apartments.APARTMENTS) bool
 	Carplaces(tableName string, i model_carplaces.CARPLACES) bool

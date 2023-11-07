@@ -105,6 +105,54 @@ func XmlElemToAdmHieRarchy(attrS xml.StartElement) model_hierarchy.AdmNode {
 	}
 	return tmpResult
 }
+
+func XmlElemToAdmHieRarchyTwo(attrS xml.StartElement) model_hierarchy.AdmNodeTwo {
+	var tmpResult model_hierarchy.AdmNodeTwo
+	for _, attr := range attrS.Attr {
+		switch attr.Name.Local {
+		case "ID":
+			tmpResult.ID = attr.Value
+		case "OBJECTID":
+			tmpResult.OBJECTID = attr.Value
+		case "PARENTOBJID":
+			tmpResult.PARENTOBJID = attr.Value
+		case "CHANGEID":
+			tmpResult.CHANGEID = attr.Value
+		case "REGIONCODE":
+			tmpResult.REGIONCODE = attr.Value
+		case "AREACODE":
+			tmpResult.AREACODE = attr.Value
+		case "CITYCODE":
+			tmpResult.CITYCODE = attr.Value
+		case "PLACECODE":
+			tmpResult.PLACECODE = attr.Value
+		case "PLANCODE":
+			tmpResult.PLACECODE = attr.Value
+		case "STREETCODE":
+			tmpResult.PLACECODE = attr.Value
+		case "PREVID":
+			tmpResult.PREVID = attr.Value
+		case "NEXTID":
+			tmpResult.NEXTID = attr.Value
+		case "UPDATEDATE":
+			tmpResult.UPDATEDATE = attr.Value
+		case "STARTDATE":
+			tmpResult.STARTDATE = attr.Value
+		case "ENDDATE":
+			tmpResult.ENDDATE = attr.Value
+		case "ISACTIVE":
+			if attr.Value == "1" {
+				tmpResult.ISACTIVE = "1"
+			} else {
+				tmpResult.ISACTIVE = "0"
+			}
+		case "PATH":
+			tmpResult.PATH = attr.Value
+		}
+	}
+	return tmpResult
+}
+
 func XmlElemToMunHieRarchy(attrS xml.StartElement) model_hierarchy.MunNode {
 	var tmpResult model_hierarchy.MunNode
 	for _, attr := range attrS.Attr {

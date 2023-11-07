@@ -25,7 +25,6 @@ type ADDRESSOBJECTTYPES struct {
 	ADDRESSOBJECTTYPE []struct {
 		Text       string `xml:",chardata"`
 		ISACTIVE   bool   `xml:"ISACTIVE,attr"`
-		ISACTIVEN  string
 		ENDDATE    string `xml:"ENDDATE,attr"`
 		STARTDATE  string `xml:"STARTDATE,attr"`
 		UPDATEDATE string `xml:"UPDATEDATE,attr"`
@@ -33,10 +32,9 @@ type ADDRESSOBJECTTYPES struct {
 		SHORTNAME  string `xml:"SHORTNAME,attr"`
 		NAME       string `xml:"NAME,attr"`
 		LEVEL      string `xml:"LEVEL,attr"`
-		ID         int64  `xml:"ID,attr"`
+		ID         int    `xml:"ID,attr"`
 	} `xml:"ADDRESSOBJECTTYPE"`
 }
-
 type APARTMENTTYPES struct {
 	XMLName       xml.Name `xml:"APARTMENTTYPES"`
 	Text          string   `xml:",chardata"`

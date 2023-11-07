@@ -69,7 +69,7 @@ func main() {
 			err.Error())
 	}
 	repos := repository.NewRepository(db)
-	services := service.NewService(repos)
+	services := service.NewService(repos, vp)
 	//handlers := handler.NewHandler(services, sshClient)
 	//ospTablename := vp.GetString("tablename.osp")
 	//--------------------------------------

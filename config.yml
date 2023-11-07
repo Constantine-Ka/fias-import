@@ -1,12 +1,12 @@
 basic:
-  filepath: "./dst"
-  prefix: "addrobj"
+  filepath: ". "
+  prefix: "hierarchyadm"
 db:
   driver: "mysql"
-  username: "konstantine"
-  password: "23981487"
+  username: admin
+  password: 42204220
   host: "localhost"
-  port: "6033"
+  port: "6034"
   dbname: "fias2"
   sslmode: "disable"
 
