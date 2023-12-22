@@ -46,19 +46,26 @@ func (db *CreatorTable) MunHierarchy(tableName string, i model_hierarchy.MUNITEM
 
 func (db *CreatorTable) AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool {
 	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `object_id` VARCHAR(255) NULL DEFAULT NULL , `parent_object` VARCHAR(255) NULL DEFAULT NULL, `change_id` INT(255) NULL DEFAULT NULL , `region_code` VARCHAR(20) NULL DEFAULT NULL , `prev_id` INT NULL DEFAULT NULL , `next_id` INT NULL DEFAULT NULL, `update_date` DATE NULL DEFAULT NULL , `start_date` DATE NULL DEFAULT NULL , `end_date` DATE NULL DEFAULT NULL , `is_active` TINYINT NULL DEFAULT NULL, `path` VARCHAR(255) NULL DEFAULT NULL , `text` VARCHAR(255) NULL DEFAULT NULL,PRIMARY KEY (`id`) ) ENGINE = InnoDB;", tableName)
-	_, err := db.db.Exec(query)
-	if err != nil {
-		logger.Info(query)
-		logger.Error(err)
-		return false
-	}
-
-	return true
-}
-func (db *CreatorTable) AdmHierarchyTwo(tableName string, i model_hierarchy.ADMITEMSTwo) bool {
-	logger := logging.GetLogger()
-	query := fmt.Sprintf("CREATE TABLE `%s` (`id` INT NOT NULL , `object_id` VARCHAR(255) NULL DEFAULT NULL , `parent_object` VARCHAR(255) NULL DEFAULT NULL, `change_id` INT(255) NULL DEFAULT NULL , `region_code` VARCHAR(20) NULL DEFAULT NULL , `prev_id` INT NULL DEFAULT NULL , `next_id` INT NULL DEFAULT NULL, `update_date` DATE NULL DEFAULT NULL , `start_date` DATE NULL DEFAULT NULL , `end_date` DATE NULL DEFAULT NULL , `is_active` TINYINT NULL DEFAULT NULL, `path` VARCHAR(255) NULL DEFAULT NULL , `text` VARCHAR(255) NULL DEFAULT NULL,PRIMARY KEY (`id`) ) ENGINE = InnoDB;", tableName)
+	query := fmt.Sprintf("CREATE TABLE `%s` ("+
+		"`pk_id` int DEFAULT NULL,"+
+		"`nalog_id` int DEFAULT NULL,"+
+		"`object_id` int DEFAULT NULL,"+
+		"`parent_object_id` int DEFAULT NULL,"+
+		"`change_id` int DEFAULT NULL,"+
+		"`region_code` int DEFAULT NULL,"+
+		"`area_code` int DEFAULT NULL,"+
+		"`city_code` int DEFAULT NULL,"+
+		"`place_code` int DEFAULT NULL,"+
+		"`plan_code` int DEFAULT NULL,"+
+		"`street_code` int DEFAULT NULL,"+
+		"`prev_id` int DEFAULT NULL,"+
+		"`next_id` int DEFAULT NULL,"+
+		"`update_date` date DEFAULT NULL,"+
+		"`start_date` date DEFAULT NULL,"+
+		"`end_date` date DEFAULT NULL,"+
+		"`is_active` int DEFAULT NULL,"+
+		"`path` varchar(255) DEFAULT NULL"+
+		") ENGINE = InnoDB;", tableName)
 	_, err := db.db.Exec(query)
 	if err != nil {
 		logger.Info(query)

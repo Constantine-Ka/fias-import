@@ -13,19 +13,26 @@ type ADMITEMSTwo struct {
 	ITEM    []AdmNodeTwo `xml:"ITEM"`
 }
 type AdmNode struct {
-	Text        string `xml:",chardata"`
 	ID          string `xml:"ID,attr"`
 	OBJECTID    string `xml:"OBJECTID,attr"`
 	PARENTOBJID string `xml:"PARENTOBJID,attr"`
 	CHANGEID    string `xml:"CHANGEID,attr"`
-	REGIONCODE  string `xml:"REGIONCODE,attr"`
-	PREVID      string `xml:"PREVID,attr"`
-	NEXTID      string `xml:"NEXTID,attr"`
-	UPDATEDATE  string `xml:"UPDATEDATE,attr"`
-	STARTDATE   string `xml:"STARTDATE,attr"`
-	ENDDATE     string `xml:"ENDDATE,attr"`
-	ISACTIVE    bool   `xml:"ISACTIVE,attr"`
-	PATH        string `xml:"PATH,attr"`
+
+	REGIONCODE int `xml:"REGIONCODE,attr"`
+	AREACODE   int `xml:"AREACODE,attr"`
+	CITYCODE   int `xml:"CITYCODE,attr"`
+	PLACECODE  int `xml:"PLACECODE,attr"`
+	PLANCODE   int `xml:"PLANCODE,attr"`
+	STREETCODE int `xml:"STREETCODE,attr"`
+
+	PREVID     string `xml:"PREVID,attr"`
+	NEXTID     string `xml:"NEXTID,attr"`
+	UPDATEDATE string `xml:"UPDATEDATE,attr"`
+	STARTDATE  string `xml:"STARTDATE,attr"`
+	ENDDATE    string `xml:"ENDDATE,attr"`
+
+	ISACTIVE bool   `xml:"ISACTIVE,attr"`
+	PATH     string `xml:"PATH,attr"`
 }
 type AdmNodeTwo struct {
 	PrimaryKey  int    `xml:"PrimaryKey"`

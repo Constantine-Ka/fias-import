@@ -13,12 +13,13 @@ import (
 	"fias-import_byLondon/utills/logging"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/spf13/viper"
 	"strings"
-	"sync"
 )
 
 type InsertData struct {
-	db *sqlx.DB
+	db  *sqlx.DB
+	cfg *viper.Viper
 }
 
 func (i2 InsertData) ParamOne(tableName string, i []model.ParamNode) bool {
@@ -226,170 +227,211 @@ func (i2 InsertData) Addressobjecttypes(tableName string, i model.DICTALL) bool 
 	return true
 }
 
-func (i2 InsertData) Params(tableName string, i model.PARAMS) bool {
+func (i2 InsertData) Params(tableName string, data model.PARAMS) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `change_id`, `change_id_end`, `type_id`, `value`, `update_date`, `start_date`, `end_date`) VALUES ", tableName)
-	var query string
-	for _, s := range i.PARAM {
+	var query, comma string
+
+	for i, s := range data.PARAM {
 
 		strings.ReplaceAll(strings.ReplaceAll(s.VALUE, "ж\\", ":"), "\\", "")
 
-		query = fmt.Sprintf(" ('%d','%s','%s','%s','%d','%s','%s','%s','%s')", s.ID, s.OBJECTID, s.CHANGEID, s.CHANGEIDEND, s.TYPEID, s.VALUE, s.UPDATEDATE, s.STARTDATE, s.ENDDATE)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
-		}
-		query = ""
-
-	}
-	return true
-}
-
-func (i2 InsertData) AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool {
-	logger := logging.GetLogger()
-	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `parent_object`, `change_id`, `region_code`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `path`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.ITEM {
-
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',IF(%t,'1','0'),'%s','%s')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH, s.Text)
-
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
-		}
-		query = ""
-	}
-
-	return true
-}
-func (i2 InsertData) AdmHierarchyTwo(tableName string, i model_hierarchy.ADMITEMSTwo) bool {
-	logger := logging.GetLogger()
-	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`PrimaryKey`, `ID`, `OBJECTID`, `PARENTOBJID`, `CHANGEID`, `REGIONCODE`, `AREACODE`, `CITYCODE`, `PLACECODE`, `PLANCODE`, `STREETCODE`, `PREVID`, `NEXTID`, `UPDATEDATE`, `STARTDATE`, `ENDDATE`, `ISACTIVE`, `PATH`, `FK_ITEMS`) VALUES ", "hierarchy_adm_2")
-	var query string
-	wg := sync.WaitGroup{}
-	for _, s := range i.ITEM {
-		go func() {
-			wg.Add(1)
-			dbCel := i2.db
-			db := *dbCel
-			query = fmt.Sprintf(" ('0','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','1')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.AREACODE, s.CITYCODE, s.PLACECODE, s.PLACECODE, s.STREETCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH)
-
+		query = fmt.Sprintf("%s%s ('%d','%s','%s','%s','%d','%s','%s','%s','%s')", query, comma, s.ID, s.OBJECTID, s.CHANGEID, s.CHANGEIDEND, s.TYPEID, s.VALUE, s.UPDATEDATE, s.STARTDATE, s.ENDDATE)
+		if (i != 0 && i%200 == 0) || i == len(data.PARAM)-1 {
 			query = queryPre + query
-			_, err := db.Exec(query)
+			_, err := i2.db.Exec(query)
 			if err != nil {
 				logger.Info(query)
 				logger.Error(err)
-
+				return false
 			}
+			comma = ""
 			query = ""
-			wg.Done()
-		}()
+		} else {
+			comma = ","
+		}
+	}
+	return true
+}
+
+func (i2 InsertData) AdmHierarchy(tableName string, data model_hierarchy.ADMITEMS) bool {
+	logger := logging.GetLogger()
+	queryPre := fmt.Sprintf("insert INTO `%s`(`nalog_id`,  `object_id`, `parent_object_id`, `change_id`, `region_code`, `area_code`, `city_code`,`place_code`, `plan_code`,`street_code`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `path`) VALUES ", tableName)
+	var query, comma string
+	for i, s := range data.ITEM {
+		query = fmt.Sprintf("%s%s ('%s','%s','%s','%s','%d','%d','%d','%d','%d','%d','%s','%s','%s','%s' ,'%s',IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.AREACODE, s.CITYCODE, s.PLACECODE, s.PLANCODE, s.STREETCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH)
+		if (i != 0 && i%200 == 0) || i == len(data.ITEM)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Panicln(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
+		}
 
 	}
-	wg.Wait()
 
 	return true
 }
 
-func (i2 InsertData) MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool {
+//func (i2 InsertData) AdmHierarchyTwo(tableName string, i model_hierarchy.ADMITEMSTwo) bool {
+//	logger := logging.GetLogger()
+//	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`PrimaryKey`, `ID`, `OBJECTID`, `PARENTOBJID`, `CHANGEID`, `REGIONCODE`, `AREACODE`, `CITYCODE`, `PLACECODE`, `PLANCODE`, `STREETCODE`, `PREVID`, `NEXTID`, `UPDATEDATE`, `STARTDATE`, `ENDDATE`, `ISACTIVE`, `PATH`, `FK_ITEMS`) VALUES ", "hierarchy_adm_2")
+//	var query string
+//	wg := sync.WaitGroup{}
+//	db0, err := NewDB(i2.cfg)
+//	if err != nil {
+//		logger.Error(err)
+//	}
+//	db1, err := NewDB(i2.cfg)
+//	if err != nil {
+//		logger.Error(err)
+//	}
+//	db2, err := NewDB(i2.cfg)
+//	if err != nil {
+//		logger.Error(err)
+//	}
+//	db3, err := NewDB(i2.cfg)
+//	if err != nil {
+//		logger.Error(err)
+//	}
+//
+//	for _, s := range i.ITEM {
+//		go (s)
+//
+//	}
+//	wg.Wait()
+//
+//	return true
+//}
+
+func (i2 InsertData) MunHierarchy(tableName string, data model_hierarchy.MUNITEMS) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `parent_object_gid`, `change_id`, `oktmo`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `path`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.ITEM {
+	var query, comma string
+	for i, s := range data.ITEM {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',IF(%t,'1','0'),'%s','%s','%s')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.OKTMO, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, "1", s.PATH, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+		query = fmt.Sprintf("%s%s  ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',IF(%t,'1','0'),'%s','%s','%s')", query, comma, s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.OKTMO, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, "1", s.PATH, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.ITEM)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 
 	}
 	return true
 }
 
-func (i2 InsertData) Apartments(tableName string, i model_apartments.APARTMENTS) bool {
+func (i2 InsertData) Apartments(tableName string, data model_apartments.APARTMENTS) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `apart_type`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.APARTMENT {
+	var query, comma string
+	for i, s := range data.APARTMENT {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.APARTTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+		query = fmt.Sprintf("%s%s  ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.APARTTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.APARTMENT)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func (i2 InsertData) Carplaces(tableName string, i model_carplaces.CARPLACES) bool {
+func (i2 InsertData) Carplaces(tableName string, data model_carplaces.CARPLACES) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.CARPLACE {
+	var query, comma string
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+	for i, s := range data.CARPLACE {
+
+		query = fmt.Sprintf("%s%s  ('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.CARPLACE)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func (i2 InsertData) Houses(tableName string, i model_houses.HOUSES) bool {
+func (i2 InsertData) Houses(tableName string, data model_houses.HOUSES) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `house_num`, `house_type`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.HOUSE {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.HOUSENUM, s.HOUSETYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+	var query, comma string
+
+	for i, s := range data.HOUSE {
+
+		query = fmt.Sprintf("%s%s ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.HOUSENUM, s.HOUSETYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.HOUSE)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func (i2 InsertData) AddrObject(tableName string, i model_objectAddr.ADDRESSOBJECTS) bool {
+func (i2 InsertData) AddrObject(tableName string, data model_objectAddr.ADDRESSOBJECTS) bool {
 	logger := logging.GetLogger()
-	//queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.OBJECT {
-		query = fmt.Sprintf("INSERT INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", tableName, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `name`, `typename`, `level`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
+	var query, comma string
+	for i, s := range data.OBJECT {
+		query = fmt.Sprintf("%s%s ('%d','%d','%s','%d','%s','%s','%d','%d','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NAME, s.TYPENAME, s.LEVEL, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.OBJECT)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 
 	}
 	return true
@@ -412,125 +454,187 @@ func AddAddrObject(DB *sqlx.DB, tableName string, i model_objectAddr.ADDRESSOBJE
 	return true
 }
 
-func (i2 InsertData) Rooms(tableName string, i model_rooms.ROOMS) bool {
+func (i2 InsertData) Rooms(tableName string, data model_rooms.ROOMS) bool {
 	logger := logging.GetLogger()
-	//queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `room_type`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.ROOM {
+	queryPre := fmt.Sprintf("INSERT INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `room_type`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
+	var query, comma string
+
+	for i, s := range data.ROOM {
 		//if _ != 0 {
 		//	query = query + ", "
 		//}
-		query = fmt.Sprintf(" REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `room_type`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", tableName, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.ROOMTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+		query = fmt.Sprintf("%s%s ('%s','%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.ROOMTYPE, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.ROOM)-1 {
+			query = queryPre + query
+
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
+
 	}
 	return true
 }
 
-func (i2 InsertData) Steads(tableName string, i model_steads.STEADS) bool {
+func (i2 InsertData) Steads(tableName string, data model_steads.STEADS) bool {
 	logger := logging.GetLogger()
-	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.STEAD {
+	queryPre := fmt.Sprintf("insert INTO `%s`(`id`, `object_id`, `object_gid`, `change_id`, `number`, `oper_type_id`, `prev_id`, `next_id`, `update_date`, `start_date`, `end_date`, `is_active`, `is_actualve`, `text`) VALUES ", tableName)
+	var query, comma string
+	for i, s := range data.STEAD {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+		query = fmt.Sprintf("%s%s ('%s','%s','%s','%s','%s','%s','%d','%d','%s','%s','%s',IF(%t,'1','0'),IF(%t,'1','0'),'%s')", query, comma, s.ID, s.OBJECTID, s.OBJECTGUID, s.CHANGEID, s.NUMBER, s.OPERTYPEID, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.ISACTUAL, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.STEAD)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
+
 	}
 
 	return true
 }
 
-func (i2 InsertData) ObjectDivision(tableName string, i model_objectAddr.ITEMS) bool {
+func (i2 InsertData) ObjectDivision(tableName string, data model_objectAddr.ITEMS) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`object_id`, `parent_id`, `child_id`, `change_id`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.ITEM {
+	var query, comma string
+	for i, s := range data.ITEM {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s')", s.ID, s.PARENTID, s.CHILDID, s.CHANGEID, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+		query = fmt.Sprintf("%s%s ('%s','%s','%s','%s','%s')", query, comma, s.ID, s.PARENTID, s.CHILDID, s.CHANGEID, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.ITEM)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func (i2 InsertData) ChangeHistory(tableName string, i model_other.CHANGEHISTORY) bool {
+func (i2 InsertData) ChangeHistory(tableName string, data model_other.CHANGEHISTORY) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`( `object_id`, `adr_object_id`, `change_id`, `oper_type_id`, `change_date`, `ndoc_id`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.ITEM {
+	var query, comma string
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%d','%s')", s.OBJECTID, s.ADROBJECTID, s.CHANGEID, s.OPERTYPEID, s.CHANGEDATE, s.NDOCID, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+	for i, s := range data.ITEM {
+
+		query = fmt.Sprintf("%s%s  ('%s','%s','%s','%s','%s','%d','%s')", query, comma, s.OBJECTID, s.ADROBJECTID, s.CHANGEID, s.OPERTYPEID, s.CHANGEDATE, s.NDOCID, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.ITEM)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func (i2 InsertData) NormDocs(tableName string, i model_other.NORMDOCS) bool {
+func (i2 InsertData) NormDocs(tableName string, data model_other.NORMDOCS) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`id`, `name`, `number`, `type`, `date`, `update_date`, `k_`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.NORMDOC {
+	var query, comma string
+	for i, s := range data.NORMDOC {
 
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s','%s')", s.ID, s.NAME, s.NUMBER, s.TYPE, s.DATE, s.UPDATEDATE, s.KIND, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+		query = fmt.Sprintf("%s%s  ('%s','%s','%s','%s','%s','%s','%s','%s')", query, comma, s.ID, s.NAME, s.NUMBER, s.TYPE, s.DATE, s.UPDATEDATE, s.KIND, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.NORMDOC)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func (i2 InsertData) ReestrObject(tableName string, i model_other.REESTROBJECTS) bool {
+func (i2 InsertData) ReestrObject(tableName string, data model_other.REESTROBJECTS) bool {
 	logger := logging.GetLogger()
 	queryPre := fmt.Sprintf("REPLACE INTO `%s`(`object_id`, `object_gid`, `change_id`, `level_id`, `update_date`, `create_date`, `text`) VALUES ", tableName)
-	var query string
-	for _, s := range i.OBJECT {
-		query = fmt.Sprintf(" ('%s','%s','%s','%s','%s','%s','%s')", s.OBJECTGUID, s.OBJECTGUID, s.CHANGEID, s.LEVELID, s.UPDATEDATE, s.CREATEDATE, s.Text)
-		query = queryPre + query
-		_, err := i2.db.Exec(query)
-		if err != nil {
-			logger.Info(query)
-			logger.Error(err)
-			return false
+	var query, comma string
+	for i, s := range data.OBJECT {
+		query = fmt.Sprintf("%s%s ('%s','%s','%s','%s','%s','%s','%s')", query, comma, s.OBJECTGUID, s.OBJECTGUID, s.CHANGEID, s.LEVELID, s.UPDATEDATE, s.CREATEDATE, s.Text)
+		if (i != 0 && i%200 == 0) || i == len(data.OBJECT)-1 {
+			query = queryPre + query
+			_, err := i2.db.Exec(query)
+			if err != nil {
+				logger.Info(query)
+				logger.Error(err)
+				return false
+			}
+			comma = ""
+			query = ""
+		} else {
+			comma = ","
 		}
-		query = ""
 	}
 
 	return true
 }
 
-func NewInsert(db *sqlx.DB) *InsertData {
-	return &InsertData{db: db}
+func NewInsert(db *sqlx.DB, cfg *viper.Viper) *InsertData {
+	return &InsertData{db: db, cfg: cfg}
 }
+
+//func addAction(s model_hierarchy.AdmNodeTwo, queryPre string, wg *sync.WaitGroup, ) {
+//	wg.Add(1)
+//	//dbCel := i2.db
+//	//db := *dbCel
+//	//db, err := NewDB(i2.cfg)
+//	//if err != nil {
+//	//	logger.Error(err)
+//	//}
+//	query := fmt.Sprintf(" ('0','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','1')", s.ID, s.OBJECTID, s.PARENTOBJID, s.CHANGEID, s.REGIONCODE, s.AREACODE, s.CITYCODE, s.PLACECODE, s.PLACECODE, s.STREETCODE, s.PREVID, s.NEXTID, s.UPDATEDATE, s.STARTDATE, s.ENDDATE, s.ISACTIVE, s.PATH)
+//
+//	query = queryPre + query
+//	_, err = i2.db.Exec(query)
+//	if err != nil {
+//		logger.Info(query)
+//		logger.Error(err)
+//
+//	}
+//	//err = db.Close()
+//	if err != nil {
+//		logger.Error(err)
+//	}
+//
+//	query = ""
+//	wg.Done()
+//}

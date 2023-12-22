@@ -154,7 +154,8 @@ func (s *FileServices) fileHandler(f, filetype string, ListTable []string) {
 		if utills.IndexOf(ListTable, cfg.Tablename.Content.AdmHierarchy) == -1 {
 			s.repo.CreateTable.AdmHierarchy(cfg.Tablename.Content.AdmHierarchy, model_hierarchy.ADMITEMS{})
 		}
-		ParserAdmHieRarchyTWO(fileReader, cfg.Tablename.Content.AdmHierarchy, s.repo)
+		//ParserUniversal(fileReader, cfg.Tablename.Content.AdmHierarchy, utills.XmlElemToAdmHieRarchy(), s.repo.Inserter.AdmHierarchy(tablename, result))
+		ParserAdmHieRarchyTWO(fileReader, cfg.Tablename.Content.AdmHierarchy, s.repo, cfg)
 		err = os.Rename(f, f+".bak")
 		if err != nil {
 			log.Print(err)

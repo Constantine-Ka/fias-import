@@ -1,5 +1,7 @@
 package model
 
+import "github.com/spf13/viper"
+
 type Config struct {
 	Db struct {
 		Driver   string `yaml:"driver"`
@@ -44,4 +46,5 @@ type Config struct {
 			ObjectDivision string `yaml:"ObjectDivision"`
 		} `yaml:"content"`
 	} `yaml:"tablename"`
+	VP *viper.Viper
 }

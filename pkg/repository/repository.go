@@ -11,6 +11,7 @@ import (
 	model_rooms "fias-import_byLondon/model/model-rooms"
 	model_steads "fias-import_byLondon/model/model-steads"
 	"github.com/jmoiron/sqlx"
+	"github.com/spf13/viper"
 )
 
 type Global interface {
@@ -27,7 +28,6 @@ type dict interface {
 type content interface {
 	Params(tableName string, i model.PARAMS) bool
 	AdmHierarchy(tableName string, i model_hierarchy.ADMITEMS) bool
-	AdmHierarchyTwo(tableName string, i model_hierarchy.ADMITEMSTwo) bool
 	MunHierarchy(tableName string, i model_hierarchy.MUNITEMS) bool
 	Apartments(tableName string, i model_apartments.APARTMENTS) bool
 	Carplaces(tableName string, i model_carplaces.CARPLACES) bool
@@ -57,10 +57,10 @@ type Repository struct {
 	//
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *sqlx.DB, cfg *viper.Viper) *Repository {
 	return &Repository{
 		CreateTable: NewCreateTable(db),
-		Inserter:    NewInsert(db),
+		Inserter:    NewInsert(db, cfg),
 		Global:      NewGlobal(db),
 	}
 }

@@ -68,7 +68,7 @@ func main() {
 		logger.Fatalf("failed to initialize db:%s",
 			err.Error())
 	}
-	repos := repository.NewRepository(db)
+	repos := repository.NewRepository(db, vp)
 	services := service.NewService(repos, vp)
 	//handlers := handler.NewHandler(services, sshClient)
 	//ospTablename := vp.GetString("tablename.osp")

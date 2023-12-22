@@ -35,6 +35,16 @@ func ComparisonInvalid(slice1, slice2 []string) []string {
 
 }
 
+func GeneralXmlElem(attrs xml.StartElement, mode string) interface{} {
+	var result interface{}
+	switch mode {
+	case "ha":
+		result = XmlElemToAdmHieRarchy(attrs)
+
+	}
+	return result
+}
+
 func XmlElemToParam(attrS xml.StartElement) model.ParamNode {
 	var tmpResult model.ParamNode
 	for _, attr := range attrS.Attr {
@@ -82,7 +92,18 @@ func XmlElemToAdmHieRarchy(attrS xml.StartElement) model_hierarchy.AdmNode {
 		case "CHANGEID":
 			tmpResult.CHANGEID = attr.Value
 		case "REGIONCODE":
-			tmpResult.REGIONCODE = attr.Value
+			tmpResult.REGIONCODE, _ = strconv.Atoi(attr.Value)
+		case "AREACODE":
+			tmpResult.AREACODE, _ = strconv.Atoi(attr.Value)
+		case "CITYCODE":
+			tmpResult.CITYCODE, _ = strconv.Atoi(attr.Value)
+		case "PLACECODE":
+			tmpResult.PLACECODE, _ = strconv.Atoi(attr.Value)
+		case "PLANCODE":
+			tmpResult.PLANCODE, _ = strconv.Atoi(attr.Value)
+		case "STREETCODE":
+			tmpResult.STREETCODE, _ = strconv.Atoi(attr.Value)
+
 		case "PREVID":
 			tmpResult.PREVID = attr.Value
 		case "NEXTID":
@@ -106,52 +127,52 @@ func XmlElemToAdmHieRarchy(attrS xml.StartElement) model_hierarchy.AdmNode {
 	return tmpResult
 }
 
-func XmlElemToAdmHieRarchyTwo(attrS xml.StartElement) model_hierarchy.AdmNodeTwo {
-	var tmpResult model_hierarchy.AdmNodeTwo
-	for _, attr := range attrS.Attr {
-		switch attr.Name.Local {
-		case "ID":
-			tmpResult.ID = attr.Value
-		case "OBJECTID":
-			tmpResult.OBJECTID = attr.Value
-		case "PARENTOBJID":
-			tmpResult.PARENTOBJID = attr.Value
-		case "CHANGEID":
-			tmpResult.CHANGEID = attr.Value
-		case "REGIONCODE":
-			tmpResult.REGIONCODE = attr.Value
-		case "AREACODE":
-			tmpResult.AREACODE = attr.Value
-		case "CITYCODE":
-			tmpResult.CITYCODE = attr.Value
-		case "PLACECODE":
-			tmpResult.PLACECODE = attr.Value
-		case "PLANCODE":
-			tmpResult.PLACECODE = attr.Value
-		case "STREETCODE":
-			tmpResult.PLACECODE = attr.Value
-		case "PREVID":
-			tmpResult.PREVID = attr.Value
-		case "NEXTID":
-			tmpResult.NEXTID = attr.Value
-		case "UPDATEDATE":
-			tmpResult.UPDATEDATE = attr.Value
-		case "STARTDATE":
-			tmpResult.STARTDATE = attr.Value
-		case "ENDDATE":
-			tmpResult.ENDDATE = attr.Value
-		case "ISACTIVE":
-			if attr.Value == "1" {
-				tmpResult.ISACTIVE = "1"
-			} else {
-				tmpResult.ISACTIVE = "0"
-			}
-		case "PATH":
-			tmpResult.PATH = attr.Value
-		}
-	}
-	return tmpResult
-}
+//func XmlElemToAdmHieRarchyTwo(attrS xml.StartElement) model_hierarchy.AdmNodeTwo {
+//	var tmpResult model_hierarchy.AdmNodeTwo
+//	for _, attr := range attrS.Attr {
+//		switch attr.Name.Local {
+//		case "ID":
+//			tmpResult.ID = attr.Value
+//		case "OBJECTID":
+//			tmpResult.OBJECTID = attr.Value
+//		case "PARENTOBJID":
+//			tmpResult.PARENTOBJID = attr.Value
+//		case "CHANGEID":
+//			tmpResult.CHANGEID = attr.Value
+//		case "REGIONCODE":
+//			tmpResult.REGIONCODE = attr.Value
+//		case "AREACODE":
+//			tmpResult.AREACODE = attr.Value
+//		case "CITYCODE":
+//			tmpResult.CITYCODE = attr.Value
+//		case "PLACECODE":
+//			tmpResult.PLACECODE = attr.Value
+//		case "PLANCODE":
+//			tmpResult.PLACECODE = attr.Value
+//		case "STREETCODE":
+//			tmpResult.PLACECODE = attr.Value
+//		case "PREVID":
+//			tmpResult.PREVID = attr.Value
+//		case "NEXTID":
+//			tmpResult.NEXTID = attr.Value
+//		case "UPDATEDATE":
+//			tmpResult.UPDATEDATE = attr.Value
+//		case "STARTDATE":
+//			tmpResult.STARTDATE = attr.Value
+//		case "ENDDATE":
+//			tmpResult.ENDDATE = attr.Value
+//		case "ISACTIVE":
+//			if attr.Value == "1" {
+//				tmpResult.ISACTIVE = "1"
+//			} else {
+//				tmpResult.ISACTIVE = "0"
+//			}
+//		case "PATH":
+//			tmpResult.PATH = attr.Value
+//		}
+//	}
+//	return tmpResult
+//}
 
 func XmlElemToMunHieRarchy(attrS xml.StartElement) model_hierarchy.MunNode {
 	var tmpResult model_hierarchy.MunNode

@@ -63,6 +63,9 @@ func init() {
 		panic(err)
 	}
 	allFile, err := os.OpenFile("logs/all.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
+	errFile, err := os.OpenFile("logs/err.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
+	warnFile, err := os.OpenFile("logs/warn.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
+	infoFile, err := os.OpenFile("logs/info.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
 	if err != nil {
 		panic(err)
 	}
@@ -71,6 +74,18 @@ func init() {
 	l.AddHook(&writerHook{
 		Writer:    []io.Writer{allFile, os.Stdout},
 		LogLevels: logrus.AllLevels,
+	})
+	l.AddHook(&writerHook{
+		Writer:    []io.Writer{errFile},
+		LogLevels: []logrus.Level{logrus.ErrorLevel},
+	})
+	l.AddHook(&writerHook{
+		Writer:    []io.Writer{warnFile},
+		LogLevels: []logrus.Level{logrus.WarnLevel},
+	})
+	l.AddHook(&writerHook{
+		Writer:    []io.Writer{infoFile},
+		LogLevels: []logrus.Level{logrus.InfoLevel},
 	})
 	l.SetLevel(logrus.TraceLevel)
 
