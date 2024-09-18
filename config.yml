@@ -12,8 +12,8 @@ db:
 
 SFTP:
   host: 192.168.0.99
-  username: web
-  password: np6aGzq5
+  username: 
+  password: 
   port: 22
 
 # В поле driver писать или "postgres" или "mysql"
